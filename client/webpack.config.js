@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 module.exports = {
     mode: "development",
@@ -22,7 +23,7 @@ module.exports = {
     },
     target:"web",
     resolve: {
-        extensions: ['.js','.jsx','.json'] 
+        extensions: ['.js','.jsx','.json'],
     },
     module:{
         rules:[
@@ -49,7 +50,7 @@ module.exports = {
             filename: "index.html",
             template: "./src/index.html",
             favicon: "./src/favicon.ico"
-        })
+        }),
+        new NodePolyfillPlugin
     ]
-    
 };

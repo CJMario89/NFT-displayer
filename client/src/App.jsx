@@ -1,4 +1,4 @@
-import "./App.scss"
+import "./scss/App.scss"
 import React from 'react'
 import {
     Routes,

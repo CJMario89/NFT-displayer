@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'iansui';
-    src: url('./assets/Iansui092-Regular.woff2') format('woff2');
+    src: url('../assets/fonts/Iansui092-Regular.woff2') format('woff2');
 }
 html{
     width: 100%;
@@ -10,6 +10,11 @@ body{
     width: 100%;
     height: 100%;
     margin: 0 auto;
+}
+#root{
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
     font-family: 'iansui';
-    font-size: 100px;
+    color: #dddddd;
 }
