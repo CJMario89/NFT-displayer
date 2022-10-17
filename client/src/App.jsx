@@ -4,7 +4,7 @@ import {
     Routes,
     Route
 } from "react-router-dom";
-import NFTDisplayer from './NFTDisplayer';
+import Main from './Main';
 
 const App = () => {
 
@@ -12,8 +12,7 @@ const App = () => {
     return (
         <Routes>
             <Route path='/'>
-                <Route index element={<NFTDisplayer />}/>
-                {/* <Route path="NFTInfoPage/*" element={<NFTInfoPage />} />                 */}
+                <Route index element={<Main />}/>
             </Route>
         </Routes>
     )
