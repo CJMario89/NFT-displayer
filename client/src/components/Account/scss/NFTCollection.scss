@@ -1,0 +1,23 @@
+.NFTCollectionView{
+    display: block;
+    position: relative;
+    width: 90%;
+    height: 90%;
+    padding: 5%;
+    padding-top: 10%;
+    overflow: scroll;
+
+    &::-webkit-scrollbar{
+        display: none;
+    }
+
+    .NFTCollection{
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: stretch;
+        width: 100%;
+        height: auto;
+    }
+}

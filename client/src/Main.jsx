@@ -1,20 +1,16 @@
 import './scss/Main.scss'
 import React, { useEffect, useState } from 'react'
-import WalletConnector from './components/Connector/WalletConnector'
-import { useDispatch, useSelector } from 'react-redux';
-import { removeWallet, selectWallet, selectWalletStatus } from './features/WalletSlice';
+import { useSelector } from 'react-redux';
+import { selectWalletStatus } from './features/WalletSlice';
 import WalletConnectorButton from './components/Connector/WalletConnectorButton';
+import WalletAccount from './components/Account/WalletAccount';
 
-const NFTDisplayer = () => {
+const Main = () => {
     const [walletConnected, setWalletConnected] = useState(true);
 
     const walletStatus = useSelector(selectWalletStatus);
-    const dispatch = useDispatch();
 
-    const disconnectWallet = ()=>{
-        dispatch(removeWallet());
-        window.localStorage.clear();
-    }
+    
 
     useEffect(()=>{
         setWalletConnected(()=>(walletStatus === 'unconnected' ? true : false));
@@ -22,16 +18,14 @@ const NFTDisplayer = () => {
     }, [walletStatus])
     return (
         <div className="main">
-            <span className='title'>
-                NFT Displayer
-            </span>
+            
 
 
             {walletConnected && <WalletConnectorButton/>}
             
-            {!walletConnected && <div className='disconnectWallet' onClick={disconnectWallet}>disconnectWallet</div>}
+            {!walletConnected && <WalletAccount/>}
         </div>
     )
 }
 
-export default NFTDisplayer
+export default Main

@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const wallet = {
-    address: '',
-    providerName: '',
-    chain_id: 1
+    address: '', //string
+    providerName: '', //string
+    chain_id: 1 //number
 }
 
 const initialState = {
-    wallet: wallet,
+    wallet: wallet, //wallet
     status: 'unconnected', // 'unconnected' | 'connected',
     error: ''
 }

@@ -1,6 +1,6 @@
 import './scss/WalletConnector.scss';
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import Web3 from 'web3';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
@@ -9,7 +9,7 @@ import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import MetamaskSVG from '../../assets/images/metamask.svg'
 import CoinbaseSVG from '../../assets/images/coinbase.svg'
 import WalletConnectSVG from '../../assets/images/walletconnect.svg'
-import { selectWallet, selectWalletStatus, setupWallet } from '../../features/WalletSlice';
+import { setupWallet } from '../../features/WalletSlice';
 
 
 const WalletConnector = (prop) => {
@@ -21,8 +21,6 @@ const WalletConnector = (prop) => {
     const [walletHint, setWalletHint] = useState(false);
     const walletHintImg = useRef(null);
 
-    const wallet = useSelector(selectWallet);
-    const walletStatus = useSelector(selectWalletStatus);
     const dispatch = useDispatch();
 
     const JSONRPC_URL = `https://mainnet.infura.io/v3/4442b8b396684ed2a3e98f9e1772cdb0`;
@@ -118,7 +116,8 @@ const WalletConnector = (prop) => {
             console.log("changed:"+account)
         });
         dispatch(setupWallet({
-            address: account,
+            address: '0x23e9e002ee2ae2baa0c9d6959578bcb77148bdcf',
+            // address: account,
             providerName: providerName,
             chain_id: CHAIN_ID
         }))
