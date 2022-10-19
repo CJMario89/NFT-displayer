@@ -1,14 +1,18 @@
 import './scss/WalletAccount.scss'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AccountInfo from './AccountInfo'
 import NFTCollection from './NFTCollection'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeWallet, selectWallet } from '../../features/WalletSlice'
+import { getNFTs, selectNFTsCursor, selectNFTsFetchedChain, selectNFTsStatus } from '../../features/NFTsSlice'
 
 const WalletAccount = () => {
     const [page, setPage] = useState('accountInfo');
     const accountInfoClassName = 'walletAccountOption accountInfoOption ' + (page === 'accountInfo' ? 'walletAccountFocus': '');
     const NFTCollectionClassName = 'walletAccountOption NFTCollectionOption ' + (page === 'NFT-collection' ? 'walletAccountFocus': '');
+    const NFTsStatus = useSelector(selectNFTsStatus);
+    const NFTsFetchedChain = useSelector(selectNFTsFetchedChain);
+    const NFTsCursor = useSelector(selectNFTsCursor);
 
     const wallet = useSelector(selectWallet);
     const dispatch = useDispatch();
@@ -18,7 +22,15 @@ const WalletAccount = () => {
         window.localStorage.clear();
     }
 
+    useEffect(()=>{
+        if(NFTsFetchedChain < 3){
+            if(NFTsStatus !== 'pending'){
+                dispatch(getNFTs(wallet.address));
+            }
+        }
+    }, [NFTsCursor, NFTsStatus, NFTsFetchedChain])
 
+    
 
     return (
         <>

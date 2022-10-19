@@ -1,7 +1,7 @@
 import './scss/NFTCollection.scss'
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addDisplayedPage, clearDisplayedPage, fetchNFTMetadata, getNFTs, selectMetadataStatus, selectNFTs, selectNFTsCursor, selectNFTsDisplayedPage, selectNFTsError, selectNFTsFetchedChain, selectNFTsStatus, selectNFTsTotal, selectSortNFTsByTime } from '../../features/NFTsSlice';
+import { addDisplayedPage, clearDisplayedPage, clearOpen, fetchNFTMetadata, getNFTs, selectMetadataStatus, selectNFTs, selectNFTsCursor, selectNFTsDisplayedPage, selectNFTsError, selectNFTsFetchedChain, selectNFTsOpen, selectNFTsStatus, selectNFTsTotal, selectSortNFTsByTime } from '../../features/NFTsSlice';
 import { selectWallet } from '../../features/WalletSlice';
 import NFTBlock from './NFTBlock';
 import NFTInfoBlock from './NFTInfoBlock';
@@ -15,29 +15,32 @@ const NFTCollection = () => {
     const NFTs = useSelector(selectNFTs);
     const NFTsTotal = useSelector(selectNFTsTotal);
     const NFTsDisplayedPage = useSelector(selectNFTsDisplayedPage);
-    const NFTsCursor = useSelector(selectNFTsCursor);
     const NFTsFetchedChain = useSelector(selectNFTsFetchedChain);
     const NFTsStatus = useSelector(selectNFTsStatus);
+    const NFTsOpen = useSelector(selectNFTsOpen);
     const NFTsMetadataStatus = useSelector(selectMetadataStatus);
     const NFTsError = useSelector(selectNFTsError);
 
     const wallet = useSelector(selectWallet);
 
-    const displayedNFTsAmount = NFTsDisplayedPage * NFTsPerPage > NFTsTotal ? NFTsTotal : NFTsDisplayedPage * NFTsPerPage;
-    const remainNFTsAmount = NFTsTotal - displayedNFTsAmount;
 
+    const displayedNFTsAmount = useRef(0);
+    const remainNFTsAmount = useRef(0);
+    const amountToDisplay = useRef(0);
 
-    const NFTOpened = false;
+    displayedNFTsAmount.current = NFTsDisplayedPage * NFTsPerPage > NFTsTotal ? NFTsTotal : NFTsDisplayedPage * NFTsPerPage
+    remainNFTsAmount.current = NFTsTotal - displayedNFTsAmount.current
+    amountToDisplay.current = remainNFTsAmount.current >= NFTsPerPage ? NFTsPerPage : remainNFTsAmount.current
+
+    const [NFTOpen, setNFTOpen] = useState(false);
 
 
     useEffect(()=>{
-        if(NFTsFetchedChain < 3){
-            dispatch(getNFTs(wallet.address));
-        }else{
-            
+        if(NFTsFetchedChain === 3){
             displayNextPageNFT();
+            setNextPageNFTButton(remainNFTsAmount.current !== 0 ? <div onClick={displayNextPageNFT} className="NextpageNFTButton">Display {amountToDisplay.current} more</div> : '');
         }
-    }, [NFTsCursor, NFTsFetchedChain])
+    }, [NFTsFetchedChain])
 
 
 
@@ -62,11 +65,11 @@ const NFTCollection = () => {
     // }, [NFTs])
 
     const [NFTCollection, setNFTCollection] = useState([]);
+    const [NextPageNFTButton, setNextPageNFTButton] = useState(null);
     const displayNextPageNFT = ()=>{
 
-        const amountToDisplay = remainNFTsAmount >= NFTsPerPage ? NFTsPerPage : remainNFTsAmount;
         let NextPageNFTs = [];
-        for(let i = displayedNFTsAmount; i < displayedNFTsAmount + amountToDisplay; i++){
+        for(let i = displayedNFTsAmount.current; i < displayedNFTsAmount.current + amountToDisplay.current; i++){
             NextPageNFTs.push(<NFTBlock index={i} key={uuidv4()}/>)
             if(NFTs[i].metadataStatus === 'idle'){
                 dispatch(fetchNFTMetadata(i));
@@ -76,17 +79,25 @@ const NFTCollection = () => {
 
         dispatch(addDisplayedPage());
     }
-
-
-    const NextpageNFTButton = remainNFTsAmount !== 0 ? <div onClick={displayNextPageNFT}>Display more</div> : '';
-
-
+    
     useEffect(()=>{
 
         return ()=>{
             dispatch(clearDisplayedPage());
+            onNFTInfoBlockBackgroundClick();
         }
     }, []);
+
+    useEffect(()=>{
+        if(NFTsOpen !== null){
+            setNFTOpen(true);
+        }
+    }, [NFTsOpen])
+
+    const onNFTInfoBlockBackgroundClick = ()=>{
+        setNFTOpen(false);
+        dispatch(clearOpen());
+    }
 
     return (
         <>
@@ -94,11 +105,11 @@ const NFTCollection = () => {
             <div className='NFTCollectionView'>
                 <div className='NFTCollection'>
                     {NFTCollection}
-                    {NextpageNFTButton}
+                    {NextPageNFTButton}
                 </div>
             </div>
             
-            {NFTOpened && <NFTInfoBlock/>}
+            {NFTOpen && <NFTInfoBlock onNFTInfoBlockBackgroundClick={onNFTInfoBlockBackgroundClick}/>}
         </>
     )
 }

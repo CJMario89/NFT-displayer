@@ -13,9 +13,10 @@
         position: absolute;
         display: block;
         top: 50%;
-        left: 27%;
+        left: 25%;
+        text-shadow: 0px 0px 0px white, 0px 0px 5px white, 0px 0px 10px white;
         transform: translate(-50%, -50%);
-        font-size: 20px;
+        font-size: 1.4vw;
     
         .disconnectWallet{
             position: absolute;
@@ -25,8 +26,9 @@
             flex-direction: row;
             justify-content: center;
             align-items: center;
-            font-size: 14px;
-            line-height: 14px;
+            font-size: 0.8vw;
+            line-height: 0.8vw;
+            text-shadow: 0px 0px 0px white, 0px 0px 5px white, 0px 0px 10px white;
             cursor: pointer;
     
             svg{
@@ -38,7 +40,7 @@
     .walletAccountNavbar{
         position: absolute;
         top: 50%;
-        left: 70%;
+        left: 75%;
         transform: translate(-50%, -50%);
         display: flex;
         flex-direction: row;
@@ -50,9 +52,9 @@
     
         .walletAccountOption{
             position: relative;
-            padding: 20px 40px;
+            padding: 1vw 2vw;
+            font-size: 2vw;
             cursor: pointer;
-            
     
             &:hover{
                 color: white;
@@ -96,6 +98,10 @@
         }
         .NFTCollectionOption.walletAccountFocus:after{
             background-position: 0% 0px;
+        }
+
+        .walletAccountFocus{
+            text-shadow: 0px 0px 0px white, 0px 0px 5px white, 0px 0px 10px white;
         }
     }
 }

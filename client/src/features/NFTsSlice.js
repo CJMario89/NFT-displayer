@@ -20,7 +20,8 @@ import axios from 'axios'
 //     isVideo: false, //boolean
 //     tokenURI: '', //string
 //     metadata: null, //metadata
-//     metadataStatus: idle // 'idle' | 'successed' | 'failed' | 'pending'
+//     metadataStatus: idle, // 'idle' | 'successed' | 'failed' | 'pending'
+//     openseaImgStatus: idle // 'idle' | 'successed' | 'failed' | 'pending'
 // }
 
 const initialState = {
@@ -59,6 +60,7 @@ export const fetchNFTMetadata = createAsyncThunk('NFTs/fetchNFTMetadata', async(
     const state = thunkAPI.getState().NFTs;
     let metadata = state.NFTs[index].metadata;
     const token_uri = state.NFTs[index].tokenURI;
+    
 
     if(metadata === null){
         if(token_uri !== 'Invalid uri'){
@@ -67,7 +69,7 @@ export const fetchNFTMetadata = createAsyncThunk('NFTs/fetchNFTMetadata', async(
                     return response.data;
                 })
                 .catch(function (error) {
-                    console.error(error);
+                    // console.error(error);
                 });
         }
         if(metadata === null || metadata === undefined || metadata === ''){
@@ -75,8 +77,8 @@ export const fetchNFTMetadata = createAsyncThunk('NFTs/fetchNFTMetadata', async(
         }
     }
 
-    console.log(index);
-    console.log(metadata);
+    // console.log(index);
+    // console.log(metadata);
     let image_url = metadata.image;
     if(image_url.includes('ipfs://')){
         image_url = image_url.replace('ipfs://', 'https://ipfs.io/ipfs/');
@@ -95,11 +97,27 @@ export const fetchNFTMetadata = createAsyncThunk('NFTs/fetchNFTMetadata', async(
             return blob !== null ? URL.createObjectURL(blob) : null;
         })
         .catch(function (error) {
-            console.error(error);
+            thunkAPI.rejectWithValue("failed");
         });
+
     
-    const isVideo = image_url.includes(".mp4") ? true : false;
+    const isVideo = (image_url.includes(".mp4") || image_url.includes(".webm")) ? true : false;
     return { metadata: metadata, image: image, index: index, isVideo: isVideo};        
+});
+
+
+export const fetchOpenSeaImg = createAsyncThunk('NFTs/fetchOpenSeaImg', async(index, thunkAPI)=>{
+    const state = thunkAPI.getState().NFTs;
+    const token_address = state.NFTs[index].tokenAddress;
+    const token_id = state.NFTs[index].tokenId;
+    const options = {method: 'GET',  headers: { 'Accept': "application/json", 'X-API-KEY': 'c9128ae930224cabac7af252a18759a1' }};
+    const raw = await axios(`https://api.opensea.io/api/v1/asset/${token_address}/${token_id}/?include_orders=false`, options)
+    if(raw.ok){
+        const response = await raw.json();
+        return response.image_url;
+    }else{
+        thunkAPI.rejectWithValue("failed");
+    }
 });
 
 
@@ -112,6 +130,13 @@ export const NFTsSlice = createSlice({
         },
         clearDisplayedPage: (state)=>{
             state.displayedPage = 0;
+        },
+        setOpen: (state, action)=>{
+            const index = action.payload;
+            state.open = state.NFTs[index];
+        },
+        clearOpen: (state)=>{
+            state.open = null;
         }
     },
     extraReducers: (builder)=>{
@@ -124,17 +149,18 @@ export const NFTsSlice = createSlice({
                 const metadata = (nft.metadata !== null) ? JSON.parse(nft.metadata) : null;
                 const NFT = {
                     chain: state.chain[state.fetchedChain],
-                    tokenAddress: nft.token_address,
+                    tokenAddress: (nft.token_address !== null ? nft.token_address : "Unknown"),
                     tokenId: nft.token_id,
                     amount: nft.amount,
                     blockNumber: nft.block_number,
                     contractType: nft.contract_type,
-                    name: nft.name,
-                    symbol: nft.symbol,
+                    name: (nft.name !== null ? nft.name : "Unknown"),
+                    symbol: (nft.symbol !== null ? nft.symbol : "Unknown"),
                     image: '',
                     tokenURI: nft.token_uri,
                     metadata: metadata,
-                    metadataStatus: 'idle'
+                    metadataStatus: 'idle',
+                    openseaImgStatus: 'idle'
                 };
 
                 state.NFTs.push(NFT);
@@ -149,10 +175,14 @@ export const NFTsSlice = createSlice({
             state.status = 'pending'
         })
         .addCase(fetchNFTMetadata.fulfilled, (state, action)=>{
-            const index = action.payload.index;
+            const index = action.meta.arg;
             state.NFTs[index].metadataStatus = 'successed';
             state.NFTs[index].metadata = action.payload.metadata
-            state.NFTs[index].name = (action.payload.metadata.name !== undefined) ? action.payload.metadata.name : state.NFTs[index].name;
+            if(action.payload.metadata!= null){
+                if(action.payload.metadata.hasOwnProperty('name')){
+                    state.NFTs[index].name = action.payload.metadata.name;
+                }
+            }
             state.NFTs[index].image = action.payload.image
             state.NFTs[index].isVideo = action.payload.isVideo
         })
@@ -163,6 +193,20 @@ export const NFTsSlice = createSlice({
         .addCase(fetchNFTMetadata.rejected, (state, action)=>{
             const index = action.meta.arg;
             state.NFTs[index].metadataStatus = 'failed';
+            state.error = action.error.message;
+        })
+        .addCase(fetchOpenSeaImg.fulfilled, (state, action)=>{
+            const index = action.meta.arg;
+            state.NFTs[index].openseaImgStatus = 'successed';
+            state.NFTs[index].image = action.payload
+        })
+        .addCase(fetchOpenSeaImg.pending, (state, action)=>{
+            const index = action.meta.arg;
+            state.NFTs[index].openseaImgStatus = 'pending';
+        })
+        .addCase(fetchOpenSeaImg.rejected, (state, action)=>{
+            const index = action.meta.arg;
+            state.NFTs[index].openseaImgStatus = 'failed';
             state.error = action.error.message;
         })
     }
@@ -179,6 +223,6 @@ export const selectNFTsStatus = state => state.NFTs.status;
 export const selectMetadataStatus = state => state.NFTs.metadataStatus;
 export const selectNFTsError = state => state.NFTs.error;
 
-export const {addDisplayedPage, clearDisplayedPage } = NFTsSlice.actions;
+export const { addDisplayedPage, clearDisplayedPage, setOpen, clearOpen } = NFTsSlice.actions;
 
 export default NFTsSlice.reducer
