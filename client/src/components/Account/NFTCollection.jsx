@@ -1,7 +1,7 @@
 import './scss/NFTCollection.scss'
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addDisplayedPage, clearDisplayedPage, clearOpen, fetchNFTMetadata, getNFTs, selectMetadataStatus, selectNFTs, selectNFTsCursor, selectNFTsDisplayedPage, selectNFTsError, selectNFTsFetchedChain, selectNFTsOpen, selectNFTsStatus, selectNFTsTotal, selectSortNFTsByTime } from '../../features/NFTsSlice';
+import { addDisplayedPage, clearDisplayedPage, clearOpen, fetchNFTfromBlockchain, fetchNFTMetadata, getNFTs, selectNFTs, selectNFTsCursor, selectNFTsDisplayedPage, selectNFTsError, selectNFTsFetchedChain, selectNFTsOpen, selectNFTsStatus, selectNFTsTotal } from '../../features/NFTsSlice';
 import { selectWallet } from '../../features/WalletSlice';
 import NFTBlock from './NFTBlock';
 import NFTInfoBlock from './NFTInfoBlock';
@@ -18,7 +18,6 @@ const NFTCollection = () => {
     const NFTsFetchedChain = useSelector(selectNFTsFetchedChain);
     const NFTsStatus = useSelector(selectNFTsStatus);
     const NFTsOpen = useSelector(selectNFTsOpen);
-    const NFTsMetadataStatus = useSelector(selectMetadataStatus);
     const NFTsError = useSelector(selectNFTsError);
 
     const wallet = useSelector(selectWallet);
@@ -36,33 +35,15 @@ const NFTCollection = () => {
 
 
     useEffect(()=>{
-        if(NFTsFetchedChain === 3){
+        if(NFTsFetchedChain === 3 && NFTsDisplayedPage === 0){
             displayNextPageNFT();
+            console.log(NFTsDisplayedPage)
+        }else if (NFTsFetchedChain === 3 ){
             setNextPageNFTButton(remainNFTsAmount.current !== 0 ? <div onClick={displayNextPageNFT} className="NextpageNFTButton">Display {amountToDisplay.current} more</div> : '');
         }
-    }, [NFTsFetchedChain])
 
+    }, [NFTsFetchedChain, NFTsDisplayedPage])
 
-
-
-    useEffect(()=>{
-        if(NFTsStatus === 'failed'){
-            console.log(NFTsError);
-        }
-
-        if(NFTsMetadataStatus === 'failed'){
-            console.log(NFTsError);
-        }
-    }, [NFTsStatus, NFTsMetadataStatus])
-
-
-    // useEffect(()=>{
-    //     if(NFTs.length > 0){
-    //         if(NFTs[0].image !== ''){
-    //             img.current.src = NFTs[0].image;
-    //         }
-    //     }
-    // }, [NFTs])
 
     const [NFTCollection, setNFTCollection] = useState([]);
     const [NextPageNFTButton, setNextPageNFTButton] = useState(null);
@@ -89,7 +70,7 @@ const NFTCollection = () => {
     }, []);
 
     useEffect(()=>{
-        if(NFTsOpen !== null){
+        if(NFTsOpen !== -1){
             setNFTOpen(true);
         }
     }, [NFTsOpen])

@@ -49,6 +49,7 @@
         height: auto;
         font-size: 30px;
         white-space: nowrap;
+        color: white;
     
         .walletAccountOption{
             position: relative;
@@ -57,7 +58,8 @@
             cursor: pointer;
     
             &:hover{
-                color: white;
+                text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
+                color: rgb(209, 244, 233);
             }
         }
     
@@ -70,9 +72,8 @@
             content: '';
             bottom: 0px;
             left: 0px;
-            background: linear-gradient(to right, transparent 0%, transparent 50%, #ffffff 50%, #ffffff 100%);
-            box-shadow: 0px 0px 0px white, 0px 0px 5px white, 0px 0px 10px white;
-            background-size: 200% 2px;
+            background: linear-gradient(to right, transparent 0%, transparent 50%, rgb(189, 244, 233, 0.8) 50%, rgb(189, 244, 233, 0.8) 100%);
+            background-size: 200% 3px;
             background-position: 0px 0px;
             transition: all 0.2s ease-in-out;
         }
@@ -85,9 +86,8 @@
             content: '';
             bottom: 0px;
             left: 0px;
-            background: linear-gradient(to left, transparent 0%, transparent 50%, #ffffff 50%, #ffffff 100%);
-            box-shadow: 0px 0px 0px white, 0px 0px 5px white, 0px 0px 10px white;
-            background-size: 200% 2px;
+            background: linear-gradient(to left, transparent 0%, transparent 50%, rgb(189, 244, 233, 0.8) 50%, rgb(189, 244, 233, 0.8) 100%);
+            background-size: 200% 3px;
             background-position: 100% 0px;
             transition: all 0.2s ease-in-out;
         }
@@ -101,7 +101,7 @@
         }
 
         .walletAccountFocus{
-            text-shadow: 0px 0px 0px white, 0px 0px 5px white, 0px 0px 10px white;
+            text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
         }
     }
 }

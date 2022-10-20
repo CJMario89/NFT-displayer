@@ -31,7 +31,7 @@
         flex-wrap: wrap;
         justify-content: space-around;
         align-content: space-around;
-        font-size: 20px;
+        font-size: 1.6vw;
         padding-top: 15px;
         padding-bottom: 15px;
         margin-top: 3px;
@@ -57,9 +57,12 @@
             background-color: rgba(20, 20, 50);
         }
     }
+    .selectedProvider{
+        background-color: rgba(20, 20, 50);
+    }
 }
 
-.walletHint{
+.walletHint, .walletSelectChain{
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -70,10 +73,10 @@
     .walletHintImg{
         width: 100px;
     }
-    .walletHintButton{
+    .walletHintButton, .walletSelectChainButton{
         display: flex;
         text-align: center;
-        font-size: 18px;
+        font-size: 1.4vw;
         line-height: 18px;
         padding: 10px 20px;
         padding-bottom: 15px;
@@ -87,6 +90,25 @@
             transform: scale(0.95);
         }
     }
+
+    .selectedChain{
+        text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
+        box-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
+        background-color: rgba(20, 20, 50);
+        transform: scale(0.95);
+    }
+}
+
+.walletSelectChainSubmitButton{
+    display: block;
+    padding: 0.6vw 2vw;
+    padding-bottom: 1vw;
+    font-size: 2vw;
+    border-radius: 2vw;
+    border: 1px white solid;
+    text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
+    box-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
+    cursor: pointer;
 }
 
 .WBtitle{
@@ -105,34 +127,7 @@
     background-color: black;
     opacity: 0.5;
 }
-.waitPage{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background-color: black;
-    opacity: 0.8;
-    font-size: 24px;
-    z-index: 2;
-    color: white;
-}
-.requestPage{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background-color: black;
-    opacity: 0.8;
-    font-size: 24px;
-    z-index: 2;
-    color: white;
-}
+
 @media screen and (max-width:821px){
     .walletContainer{
         width: 40vw;

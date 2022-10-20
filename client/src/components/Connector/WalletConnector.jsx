@@ -19,12 +19,22 @@ const WalletConnector = (prop) => {
     const WalletConnectIcon = useRef(null);
 
     const [walletHint, setWalletHint] = useState(false);
+    const [walletSelectChain, setWalletSelectChain] = useState('');
+    const selectedChain = useRef('');
     const walletHintImg = useRef(null);
 
     const dispatch = useDispatch();
 
-    const JSONRPC_URL = `https://mainnet.infura.io/v3/4442b8b396684ed2a3e98f9e1772cdb0`;
-    const CHAIN_ID = 1;
+    const providers = {
+        'eth': 'https://mainnet.infura.io/v3/1f9ca76803de40b4b081c9d89dd407fb',
+        'bsc': 'https://bsc-dataseed.binance.org/',
+        'polygon': 'https://polygon-rpc.com'
+    }
+    const CHAIN_ID = {
+        'eth': 1,
+        'bsc': 56,
+        'polygon': 137
+    }
 
     let MetamaskExtension = false;
     if(window.ethereum !== undefined){
@@ -43,13 +53,18 @@ const WalletConnector = (prop) => {
             const web3 = new Web3(provider);
 
             const accounts = await provider.request({ method: 'eth_requestAccounts' });
-            await provider.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: web3.utils.toHex(1) }]
-            });
+            let chain_id = await web3.eth.getChainId();
+            if(chain_id !== 1 && chain_id !== 56 && chain_id !== 137){
+                await provider.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: web3.utils.toHex(1) }]
+                });
+            }
+            chain_id = await web3.eth.getChainId();
+            
             const account = accounts[0];
 
-            walletListener(provider, "MetaMask", account);
+            walletListener(provider, "MetaMask", account, chain_id);
         }catch(e){
             throw e;
         }
@@ -59,25 +74,28 @@ const WalletConnector = (prop) => {
         if(walletHint !== false){
             setWalletHint(false);
         }
+
+        if(selectedChain.current === ''){
+            setWalletSelectChain(true);
+        }
         const provider = new WalletConnectProvider({
             rpc: {
-                1: `https://mainnet.infura.io/v3/4442b8b396684ed2a3e98f9e1772cdb0`,
-                56: `https://hardworking-divine-ensemble.bsc.discover.quiknode.pro/43958efedb5ffdfbb03ed542992a33da7b09a51f/`
+                [CHAIN_ID[selectedChain.current]]: provider[selectedChain.current]
             },
-            chainId: CHAIN_ID
+            chainId: CHAIN_ID[selectedChain.current]
         });
         try{
             await provider.enable();
             const web3 = new Web3(provider);
             var accounts = await web3.eth.getAccounts();
             const account = accounts[0];
-            walletListener(provider, "WalletConnect", account);
+            walletListener(provider, "WalletConnect", account, CHAIN_ID[selectedChain.current]);
         }catch(e){
             throw e;
         }
     }
 
-    const connectCoinbase = async()=>{
+    const connectCoinbase = async(chain)=>{
         if(walletHint !== false){
             setWalletHint(false);
         }
@@ -87,14 +105,14 @@ const WalletConnector = (prop) => {
             darkMode: false
         });
         const provider = client.makeWeb3Provider(
-            JSONRPC_URL,
-            CHAIN_ID
+            providers[selectedChain.current],
+            CHAIN_ID[selectedChain.current]
         );
         try{
             const web3 = new Web3(provider);
             var accounts = await provider.request({ method: 'eth_requestAccounts' });
             const account = accounts[0];
-            walletListener(provider, "Coinbase", account);
+            walletListener(provider, "Coinbase", account, CHAIN_ID[selectedChain.current]);
             // walletListener(window.ethereum, account);
         }catch(e){
             console.log(e);
@@ -110,16 +128,20 @@ const WalletConnector = (prop) => {
     }
 
 
-    const walletListener = (provider, providerName, account)=>{
+    const walletListener = (provider, providerName, account, chain_id)=>{
         provider.on("accountsChanged", async function(accounts){
             account = accounts[0];
             console.log("changed:"+account)
         });
         dispatch(setupWallet({
-            address: '0x23e9e002ee2ae2baa0c9d6959578bcb77148bdcf',
-            // address: account,
+            // address: '0x1ea2246dc2266351a9e83a2cfa8c62068ea88f20',
+            // address: '0x23e9e002ee2ae2baa0c9d6959578bcb77148bdcf',
+            // address: '0x4739184af54fcffd93659fe683d9c47928f5188f',
+            // address: '0x3f166fbf7e51eee07420bc72ea00867a130e3770',
+            // address: '0x8fda249af3d924dc3a0a41aae82ff6664ac733b2',
+            address: account,
             providerName: providerName,
-            chain_id: CHAIN_ID
+            chain_id: chain_id
         }))
 
         console.log(account)
@@ -154,7 +176,7 @@ const WalletConnector = (prop) => {
                             Metamask
                         </span>
                     </div>
-                    <div className="wallet" onClick={connectCoinbase}>
+                    <div className="wallet" onClick={(e)=>{setWalletSelectChain('Coinbase'); document.querySelector(".selectedProvider")?.classList.remove("selectedProvider"); e.currentTarget.classList.add("selectedProvider")}}>
                         <div className="walletIcon">
                             <img ref={CoinbaseIcon} className="CoinbaseIcon" alt=''></img>
                         </div>
@@ -162,7 +184,7 @@ const WalletConnector = (prop) => {
                             Coinbase
                         </span>
                     </div>
-                    <div className="wallet" onClick={connectWalletConnect}>
+                    <div className="wallet" onClick={(e)=>{setWalletSelectChain('WalletConnect');  document.querySelector(".selectedProvider")?.classList.remove("selectedProvider"); e.currentTarget.classList.add("selectedProvider")}}>
                         <div className="walletIcon">
                             <img ref={WalletConnectIcon} className="WalletConnectIcon" alt=''></img>
                         </div>
@@ -183,6 +205,28 @@ const WalletConnector = (prop) => {
                         connect mobile with QRcode
                     </div>
                 </div> }
+                {walletSelectChain && <div className='walletSelectChain'>
+                    <div className='WBtitle'>
+                        Choose a network
+                    </div>
+                    
+                    <div className='walletSelectChainButton' onClick={(e)=>{selectedChain.current = 'eth'; document.querySelector(".selectedChain")?.classList.remove('selectedChain'); e.currentTarget.classList.add('selectedChain');}}>
+                        Ethereum Mainnet
+                    </div>
+                    <div className='walletSelectChainButton' onClick={(e)=>{selectedChain.current = 'bsc'; document.querySelector(".selectedChain")?.classList.remove('selectedChain'); e.currentTarget.classList.add('selectedChain');}}>
+                        Binance Smart Chain
+                    </div>
+                    <div className='walletSelectChainButton' onClick={(e)=>{selectedChain.current = 'polygon'; document.querySelector(".selectedChain")?.classList.remove('selectedChain'); e.currentTarget.classList.add('selectedChain');}}>
+                        Polygon Mainnet
+                    </div>
+
+                    <div className='walletSelectChainSubmitButton' onClick={()=>{walletSelectChain === 'Coinbase' ? connectCoinbase() : connectWalletConnect()}}>
+                        Connect
+                    </div>
+                </div>
+                
+
+                }
             </div>
             <div className='walletBackground' onClick={onWalletBackgroundClick}></div>
         </>
