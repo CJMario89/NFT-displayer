@@ -9,6 +9,8 @@ You can Connect your wallet and view your wallet info and NFTs on multiple chain
 
 How to build the project up ?
 
+env: "react": "^18.2.0",, "express": "^4.18.2"
+
 1. git clone https://github.com/CJMario89/NFT-displayer.git
 2. cd NFT-displayer
 3. npm install 
@@ -21,7 +23,7 @@ How to build the project up ?
 (run on localhost:5000)
 
 
-1. setup dependency
+1. setup dependency (https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up)
 2. Heroku login
 3. cd NFT-displayer
 4. Heroku create 
