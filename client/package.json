@@ -1,5 +1,5 @@
 {
-    "name": "NFT-displayer",
+    "name": "nft-displayer",
     "version": "1.0.0",
     "description": "NFT-displayer",
     "main": "./src/index.js",
