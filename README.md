@@ -18,8 +18,9 @@ env: "react": "^18.2.0",, "express": "^4.18.2"
 4. cd client
 5. npm install
     (for react.js)
-6. cd ..
-7. npm start
+6. npm run dev (for webpack)
+7. cd ..
+8. npm start
 (run on localhost:5000)
 
 
