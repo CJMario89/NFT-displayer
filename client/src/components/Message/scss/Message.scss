@@ -1,3 +1,13 @@
+@mixin pad{
+    @media(max-width: 1000px){
+        @content;
+    }
+}
+@mixin mobile{
+    @media(max-width: 600px){
+        @content;
+    }
+}
 .msgCon{
     display: flex;
     flex-direction: row;
@@ -22,6 +32,16 @@
     transform: translateX(120%);
     opacity: 1;
     backdrop-filter: blur(30px);
+    @include pad{
+        font-size: 2.6vw;
+        width: 25vw;
+        height: 4vh;
+    }
+    @include mobile{
+        font-size: 4vw;
+        width: 35vw;
+        height: 4.5vh;
+    }
 }
 
 @keyframes showMsg{

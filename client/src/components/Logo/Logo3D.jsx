@@ -26,7 +26,16 @@ const Logo3D = () => {
         const renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } );
         const control = new OrbitControls(camera, renderer.domElement);
         const navbar = document.querySelector(".navbarContainer");
-        
+        let scaleRWD = 550;
+        if(window.innerWidth < 500){
+            scaleRWD = 100;
+        }else if(window.innerWidth < 1000){
+            scaleRWD = 260;
+        }else if(window.innerWidth < 1500){
+            scaleRWD = 350;
+        }else{
+            scaleRWD = 550;
+        }
 
         function init3D(){
             //camera
@@ -44,7 +53,7 @@ const Logo3D = () => {
         
             //renderer
             if(parentDom){
-                scaleSize.current = parentDom.clientWidth / 550;
+                scaleSize.current = parentDom.clientWidth / scaleRWD;
                 renderer.setClearColor( 0x000000, 0);
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.setSize( parentDom.clientWidth, parentDom.clientHeight );
@@ -125,11 +134,22 @@ const Logo3D = () => {
 
         function onWindowResize() {
             if(parentDom){
-                if(scaleSize.current !== parentDom.clientWidth / 550){
+                if(window.innerWidth < 500){
+                    scaleRWD = 400;
+                }else if(window.innerWidth < 800){
+                    scaleRWD = 300;
+                }else if(window.innerWidth < 1000){
+                    scaleRWD = 500;
+                }else if(window.innerWidth < 1250){
+                    scaleRWD = 300;
+                }else{
+                    scaleRWD = 500;
+                }
+                if(scaleSize.current !== parentDom.clientWidth / scaleRWD){
                     camera.aspect = parentDom.clientWidth / parentDom.clientHeight;
                     camera.updateProjectionMatrix();
                     renderer.setSize(parentDom.clientWidth, parentDom.clientHeight);
-                    scaleSize.current = parentDom.clientWidth / 550;
+                    scaleSize.current = parentDom.clientWidth / scaleRWD;
                     logo.current?.scale.set(scaleSize.current, scaleSize.current, scaleSize.current);
                 }   
             }

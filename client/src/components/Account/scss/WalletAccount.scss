@@ -1,3 +1,13 @@
+@mixin pad{
+    @media(max-width: 1000px){
+        @content;
+    }
+}
+@mixin mobile{
+    @media(max-width: 600px){
+        @content;
+    }
+}
 .navbar{
     display: block;
     position: fixed;
@@ -18,6 +28,16 @@
         text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
         transform: translate(-50%, -50%);
         font-size: 1.4vw;
+        @include pad{
+            font-size: 2vw;
+            top: 50%;
+            left: 25%;
+        }
+        @include mobile{
+            font-size: 3vw;
+            top: 25%;
+            left: 40%;
+        }
     
         .disconnectWallet{
             position: absolute;
@@ -31,14 +51,32 @@
             line-height: 0.8vw;
             text-shadow: 0px 0px 0px white, 0px 0px 5px white, 0px 0px 10px white;
             cursor: pointer;
+            @include pad{
+                font-size: 1.4vw;
+                left: 0%;
+                top: 180%;
+            }
+            @include mobile{
+                font-size: 3vw;
+                left: -50%;
+                top: 250%;
+            }
     
             &:hover{
                 text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
             }
           
             svg{
-                width: 18px;
-                height: 18px;
+                width: 1.2vw;
+                height: 1.2vw;
+                @include pad{
+                    width: 1.4vw;
+                    height: 1.4vw;
+                }
+                @include mobile{
+                    width: 2vw;
+                    height: 2vw;
+                }
             }
         }
     }
@@ -56,12 +94,25 @@
         font-size: 1.6vw;
         white-space: nowrap;
         color: white;
-    
+        @include pad{
+            top: 70%;
+            font-size: 2.4vw;
+        }
+        @include mobile{
+            top: 75%;
+            font-size: 3vw;
+        }
         .walletAccountOption{
             position: relative;
             padding: 1vw 2vw;
-            font-size: 2vw;
+            font-size: 1.8vw;
             cursor: pointer;
+            @include pad{
+                font-size: 2.2vw;
+            }
+            @include mobile{
+                font-size: 3vw;
+            }
     
             &:hover{
                 text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);

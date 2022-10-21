@@ -52,7 +52,7 @@ const NFTInfoBlock = (prop) => {
                 )
             }else if(NFT.imgStatus === 'pending'){
                 setNFTImg(
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" style={{margin: 'auto', background: 'none', display: 'block', shapeRendering: 'auto', width:"200px", height:"200px", preserveAspectRatio:"xMidYMid"}} viewBox="0 0 100 100">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" style={{ background: 'none', display: 'block', shapeRendering: 'auto', preserveAspectRatio:"xMidYMid"}} viewBox="0 0 100 100">
                         <path d="M10 50A40 40 0 0 0 90 50A40 42 0 0 1 10 50" fill="#d5d5d5" stroke="none">
                             <animateTransform attributeName="transform" type="rotate" dur="5.88235294117647s" repeatCount="indefinite" keyTimes="0;1" values="0 50 51;360 50 51"></animateTransform>
                         </path>

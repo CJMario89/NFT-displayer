@@ -50,6 +50,10 @@ const WalletConnector = (prop) => {
         }
     }
 
+    const mobile = window.innerWidth < 768 ? true : false;
+    console.log(mobile)
+    console.log(window.innerWidth)
+
     const connectMetamask = async()=>{
 
         if(selectedChain.current !== ''){
@@ -177,12 +181,8 @@ const WalletConnector = (prop) => {
         localStorage.setItem('providerName', providerName);
         localStorage.setItem('wallet_address', account);
         dispatch(setupWallet({
-            // address: '0x1ea2246dc2266351a9e83a2cfa8c62068ea88f20',
-            // address: '0x23e9e002ee2ae2baa0c9d6959578bcb77148bdcf',
-            // address: '0x4739184af54fcffd93659fe683d9c47928f5188f',
-            // address: '0x3f166fbf7e51eee07420bc72ea00867a130e3770',
-            // address: '0x8fda249af3d924dc3a0a41aae82ff6664ac733b2',
-            address: account,
+            address: '0x23e9e002ee2ae2baa0c9d6959578bcb77148bdcf',
+            // address: account,
             providerName: providerName,
             chain_id: chain_id,
             balance: balance
@@ -211,8 +211,10 @@ const WalletConnector = (prop) => {
                 connectWalletConnect()
             }
         }
-        MetamaskIcon.current.src = MetamaskSVG;
-        CoinbaseIcon.current.src = CoinbaseSVG;
+        if(!mobile){
+            MetamaskIcon.current.src = MetamaskSVG;
+            CoinbaseIcon.current.src = CoinbaseSVG;
+        }
         WalletConnectIcon.current.src = WalletConnectSVG;
     }, []);
 
@@ -229,22 +231,22 @@ const WalletConnector = (prop) => {
                     <div className='WBtitle'>
                         Providers
                     </div>
-                    <div className="wallet" onClick={(e)=>{setWalletSelectChain(''); document.querySelector(".selectedProvider")?.classList.remove("selectedProvider"); e.currentTarget.classList.add("selectedProvider"); connectMetamask();}}>
+                    {mobile || <div className="wallet" onClick={(e)=>{setWalletSelectChain(''); document.querySelector(".selectedProvider")?.classList.remove("selectedProvider"); e.currentTarget.classList.add("selectedProvider"); connectMetamask();}}>
                         <div className="walletIcon">
                             <img ref={MetamaskIcon} className="MetamaskIcon" alt=''></img>
                         </div>
                         <span>
                             Metamask
                         </span>
-                    </div>
-                    <div className="wallet" onClick={(e)=>{setWalletSelectChain('Coinbase'); document.querySelector(".selectedProvider")?.classList.remove("selectedProvider"); e.currentTarget.classList.add("selectedProvider")}}>
+                    </div>}
+                    {mobile || <div className="wallet" onClick={(e)=>{setWalletSelectChain('Coinbase'); document.querySelector(".selectedProvider")?.classList.remove("selectedProvider"); e.currentTarget.classList.add("selectedProvider")}}>
                         <div className="walletIcon">
                             <img ref={CoinbaseIcon} className="CoinbaseIcon" alt=''></img>
                         </div>
                         <span>
                             Coinbase
                         </span>
-                    </div>
+                    </div> }
                     <div className="wallet" onClick={(e)=>{setWalletSelectChain('WalletConnect');  document.querySelector(".selectedProvider")?.classList.remove("selectedProvider"); e.currentTarget.classList.add("selectedProvider")}}>
                         <div className="walletIcon">
                             <img ref={WalletConnectIcon} className="WalletConnectIcon" alt=''></img>
@@ -281,7 +283,13 @@ const WalletConnector = (prop) => {
                         Polygon Mainnet
                     </div>
 
-                    <div className='walletSelectChainSubmitButton' onClick={()=>{walletSelectChain === 'Coinbase' ? connectCoinbase() : connectWalletConnect()}}>
+                    <div className='walletSelectChainSubmitButton' onClick={()=>{
+                            if(mobile){
+                                mobileConnect();
+                                return;
+                            }
+                            walletSelectChain === 'Coinbase' ? connectCoinbase() : connectWalletConnect()
+                        }}>
                         Connect
                     </div>
                 </div>

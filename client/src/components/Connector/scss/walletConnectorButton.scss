@@ -1,23 +1,41 @@
+@mixin pad{
+    @media(max-width: 1000px){
+        @content;
+    }
+}
+@mixin mobile{
+    @media(max-width: 600px){
+        @content;
+    }
+}
 .connectWallet{
     display: block;
     position: absolute;
-    top: 70%;
+    top: 80%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 20px;
+    padding: 1vw 2vw;
     border-radius: 20px;
-    font-size: 2vw;
+    font-size: 1.8vw;
     text-align: center;
-    background-color: rgba(0, 0, 150, 0.3);
+    background-color: rgba(20, 20, 70, 0.3);
     white-space: nowrap;
     cursor: pointer;
     opacity: 0;
     visibility: hidden;
     text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
     box-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
-
+    @include pad{
+        font-size: 2.2vw;
+        padding: 1.4vw 2.8vw;
+    }
+    @include mobile{
+        font-size: 3.5vw;
+        padding: 1.2vh 2.4vh;
+    }
     &:hover{
-        background-color: rgba(50, 50, 200, 0.3);
+        color: rgb(163, 232, 248);
+        background-color: rgba(20, 20, 70);
     }
 }
 
@@ -34,6 +52,14 @@
     top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 50vw;
-    height: 30vw;
+    width: 40vw;
+    height: 40vw;
+    @include pad{
+        width: 60vw;
+        height: 60vw;
+    }
+    @include mobile{
+        width: 100vw;
+        height: 100vw;
+    }
 }

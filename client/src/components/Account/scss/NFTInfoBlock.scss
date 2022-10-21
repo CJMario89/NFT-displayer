@@ -1,3 +1,18 @@
+@mixin pad{
+    @media(max-width: 1000px){
+        @content;
+    }
+}
+@mixin mid{
+    @media(max-width: 800px){
+        @content;
+    }
+}
+@mixin mobile{
+    @media(max-width: 600px){
+        @content;
+    }
+}
 .NFTInfoBlock{
     display: flex;
     flex-direction: row;
@@ -6,8 +21,8 @@
     left: 50%;
     transform: translate(-50%, -50%);
     height: 75%;
-    width: 80%;
-    font-size: 26px;
+    width: 75%;
+    font-size: 1.8vw;
     text-shadow: 0px 0px 0px white, 0px 0px 5px white, 0px 0px 10px white;
     border: 1px solid white;
     border-radius: 10px;
@@ -15,6 +30,24 @@
     background-color: rgba(20, 20, 50, 0.5);
     backdrop-filter: blur(30px);
     z-index: 91;
+    
+    @include pad{
+        height: 75%;
+        width: 75%;
+        font-size: 2.2vw;
+    }
+    @include mid{
+        height: 70%;
+        width: 80%;
+        font-size: 2.6vw;
+        flex-direction: column;
+    }
+    @include mobile{
+        height: 80%;
+        width: 90%;
+        font-size: 4vw;
+        flex-direction: column;
+    }
 
     .NFTInfoImgContainer{
         display: flex;
@@ -24,12 +57,33 @@
         position: relative;
         width: 40%;
         height: 100%;
+        @include pad{
+            width: 40%;
+            height: 100%;
+        }
+        @include mid{
+            width: 100%;
+            height: 50%;
+        }
+        @include mobile{
+            width: 100%;
+            height: 40%;
+        }
         
         .NFTInfoImg{
             display: block;
             position: relative;
             width: 80%;
             height: 60%;
+            @include pad{
+                padding: 1%;
+            }
+            @include mid{
+                padding: 2%;
+            }
+            @include mobile{
+                padding: 1%;
+            }
 
             img{
                 display: block;
@@ -73,11 +127,26 @@
             width: 80%;
             height: 30px;
             margin-top: 10%;
-            font-size: 20px;
-            line-height: 20px;
+            font-size: 1.4vw;
+            line-height: 1.4vw;
             white-space: nowrap;
             text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
             color: rgb(209, 244, 233);
+            @include pad{
+                margin-top: 5%;
+                font-size: 2vw;
+                line-height: 2vw;
+            }
+            @include mid{
+                margin-top: 1%;
+                font-size: 2.6vw;
+                line-height: 2.6vw;
+            }
+            @include mobile{
+                margin-top: 3%;
+                font-size: 4vw;
+                line-height: 4vw;
+            }
         }
 
         .NFTInfoTokenId{
@@ -89,11 +158,26 @@
             width: 80%;
             height: 30px;
             margin-top: 5%;
-            font-size: 20px;
-            line-height: 20px;
+            font-size: 1.4vw;
+            line-height: 1.4vw;
             white-space: nowrap;
             text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
             color: rgb(209, 244, 233);
+            @include pad{
+                margin-top: 3%;
+                font-size: 2vw;
+                line-height: 2vw;
+            }
+            @include mid{
+                margin-top: 1%;
+                font-size: 2.6vw;
+                line-height: 2.6vw;
+            }
+            @include mobile{
+                margin-top: 1%;
+                font-size: 4vw;
+                line-height: 4vw;
+            }
         }
     }
 
@@ -104,6 +188,21 @@
         flex-direction: column;
         width: 60%;
         height: 100%;
+        mask-image: linear-gradient(to top,rgba(0,0,0,0) 0%, rgba(0,0,0,1) 5%, rgba(0,0,0,1) 50%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+        -webkit-mask-image: linear-gradient(to top,rgba(0,0,0,0) 0%, rgba(0,0,0,1) 5%, rgba(0,0,0,1) 50%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+
+        @include pad{
+            width: 60%;
+            height: 100%;
+        }
+        @include mid{
+            width: 100%;
+            height: 50%;
+        }
+        @include mobile{
+            width: 100%;
+            height: 60%;
+        }
 
         .NFTInfoDetailContainer{
             display: block;
@@ -139,8 +238,18 @@
                 font-size: 1.4vw;
                 overflow-wrap: anywhere;
                 word-break: break-all;
+                @include pad{
+                    font-size: 1.8vw;
+                }
+                @include mid{
+                    font-size: 2.6vw;
+                }
+                @include mobile{
+                    font-size: 4vw;
+                }
 
                 .token_address{
+                    color: rgb(163, 232, 248);
                     text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 1px rgb(163, 232, 248);
                     cursor: pointer;
                     &:hover{
@@ -155,6 +264,16 @@
                     margin-right: 2vw;
                     text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
                     color: rgb(209, 244, 233);
+                    @include pad{
+                        width: 30vw;
+                    }
+                    @include mid{
+                        width: 40vw;
+
+                    }
+                    @include mobile{
+                        width: 50vw;
+                    }
                 }
                 p{
                     display: block;
@@ -177,6 +296,20 @@
                 text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
                 color: rgb(209, 244, 233);
 
+                @include pad{
+                    font-size: 2vw;
+                }
+                @include mid{
+                    font-size: 2.8vw;
+                    padding-top: 4vh;
+                    padding-bottom: 1vh;
+                }
+                @include mobile{
+                    font-size: 4vw;
+                    padding-top: 2vh;
+                    padding-bottom: 1vh;
+                }
+
                 span{
                     text-align: center;
                 }
@@ -189,6 +322,21 @@
                 padding-top: 2vh;
                 padding-bottom: 2vh;
                 text-shadow: none;
+                @include pad{
+                    font-size: 1.8vw;
+                    padding-top: 2vh;
+                    padding-bottom: 2vh;
+                }
+                @include mid{
+                    font-size: 2.4vw;
+                    padding-top: 1vh;
+                    padding-bottom: 1vh;
+                }
+                @include mobile{
+                    font-size: 3.4vw;
+                    padding-top: 1vh;
+                    padding-bottom: 1vh;
+                }
             }
         }
     
@@ -200,16 +348,35 @@
             position: relative;
             height: 20%;
             margin-right: 3vw;
-            font-size: 1.5vw;
+            font-size: 1.4vw;
+            @include pad{
+                font-size: 2vw;
+            }
+            @include mid{
+                font-size: 2.6vw;
+            }
+            @include mobile{
+                font-size: 4vw;
+            }
     
             div{
                 display: block;
                 position: relative;
-                padding: 0.5vw 1.2vw;
+                padding: 0.5vw 1.5vw;
                 margin-right: 2vw;
                 border: 1px solid white;
                 border-radius: 10px;
                 cursor: pointer;
+
+                @include pad{
+                    padding: 0.8vw 1.6vw;
+                }
+                @include mid{
+                    padding: 1vw 2vw;
+                }
+                @include mobile{
+                    padding: 1vh 2vh;
+                }
 
                 &:hover{
                     transform: scale(0.95);

@@ -1,3 +1,13 @@
+@mixin pad{
+    @media(max-width: 1000px){
+        @content;
+    }
+}
+@mixin mobile{
+    @media(max-width: 600px){
+        @content;
+    }
+}
 .accountInfo{
     display: flex;
     flex-direction: column;
@@ -13,6 +23,14 @@
     text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
     color: rgb(209, 244, 233);
     background-color: transparent;
+    @include pad{
+        font-size: 2.8vw;
+        width: 80%;
+    }
+    @include mobile{
+        font-size: 4vw;
+        width: 90%;
+    }
 
 
     .accountInfoContainer{

@@ -1,3 +1,18 @@
+@mixin pad{
+    @media(max-width: 1000px){
+        @content;
+    }
+}
+@mixin mid{
+    @media(max-width: 800px){
+        @content;
+    }
+}
+@mixin mobile{
+    @media(max-width: 600px){
+        @content;
+    }
+}
 .ContractTokenIdBlock{
     display: flex;
     flex-direction: column;
@@ -18,12 +33,40 @@
     backdrop-filter: blur(30px);
     z-index: 93;
 
+    @include pad{
+        height: 80%;
+        width: 45%;
+        font-size: 2.2vw;
+    }
+    @include mid{
+        height: 70%;
+        width: 65%;
+        font-size: 2.6vw;
+    }
+    @include mobile{
+        height: 65%;
+        width: 80%;
+        font-size: 4.4vw;
+    }
+
     svg{
         display: block;
         position: relative;
-        margin: 0px !important;
-        width: 10% !important;
-        height: 10% !important;
+        margin: 0px;
+        width: 10%;
+        height: 10%;
+        @include pad{
+            width: 12%;
+            height: 12%;
+        }
+        @include mid{
+            width: 15vw;
+            height: 15vw;
+        }
+        @include mobile{
+            width: 20vw;
+            height: 20vw;
+        }
     }
     input{
         display: block;
@@ -48,6 +91,21 @@
         padding-top: 2vh;
         padding-bottom: 1.5vh;
         text-shadow: none;
+        @include pad{
+            font-size: 1.8vw;
+            padding-top: 2vh;
+            padding-bottom: 1.5vh;
+        }
+        @include mid{
+            font-size: 2.6vw;
+            padding-top: 1.5vh;
+            padding-bottom: 1vh;
+        }
+        @include mobile{
+            font-size: 4vw;
+            padding-top: 1vh;
+            padding-bottom: 0.5vh;
+        }
     }
 
     div{
@@ -58,6 +116,18 @@
         padding-top: 3vh;
         padding-bottom: 0vh;
         text-shadow: none;
+        @include pad{
+            font-size: 2vw;
+            padding-top: 2vh;
+        }
+        @include mid{
+            font-size: 2.8vw;
+            padding-top: 1.5vh;
+        }
+        @include mobile{
+            font-size: 4vw;
+            padding-top: 2vh;
+        }
     }
 }
 

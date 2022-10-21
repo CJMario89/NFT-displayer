@@ -1,13 +1,34 @@
+@mixin pad{
+    @media(max-width: 1000px){
+        @content;
+    }
+}
+@mixin mobile{
+    @media(max-width: 600px){
+        @content;
+    }
+}
 .NFTCollectionView{
     display: block;
     position: absolute;
-    width: calc( 100% - 14vw );
-    height: calc( 100% - 10vw );
-    padding-left: 7vw;
-    padding-right: 7vw;
-    padding-top: 10vw;
+    width: calc( 100% - 20vw );
+    height: calc( 100% - 14vh );
+    padding-left: 10vw;
+    padding-right: 10vw;
+    padding-top: 14vh;
     overflow-y: scroll;
     overflow-x: hidden;
+
+    @include pad{
+        width: calc( 100% - 20vw );
+        padding-left: 10vw;
+        padding-right: 10vw;
+    }
+    @include mobile{
+        width: calc( 100% - 24vw );
+        padding-left: 12vw;
+        padding-right: 12vw;
+    }
 
     &::-webkit-scrollbar{
         width: 5px;
@@ -31,7 +52,7 @@
         align-items: stretch;
         width: 100%;
         height: auto;
-        padding-bottom: 10vw;
+        padding-bottom: 8vw;
     }
 }
 
@@ -42,7 +63,7 @@
     margin-top: 1vw;
     margin-bottom: 1vw;
     padding: 0.7vw 1.5vw;
-    font-size: 2vw;
+    font-size: 1.8vw;
     text-shadow: 0px 0px 0px white, 0px 0px 5px white, 0px 0px 10px white;
     border: 1px solid white;
     border-radius: 10px;
@@ -52,6 +73,15 @@
     &:hover{
         transform: scale(0.95);
         box-shadow: 0px 0px 0px white, 0px 0px 10px white, 0px 0px 30px white;
+    }
+
+    @include pad{
+        padding: 1vw 2vw;
+        font-size: 2.6vw;
+    }
+    @include mobile{
+        padding: 2vw 4vw;
+        font-size: 4vw;
     }
 }
 
@@ -65,7 +95,27 @@
     font-size: 1.5vw;
     text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
     cursor: pointer;
+    @include pad{
+        font-size: 2vw;
+    }
+    @include mobile{
+        font-size: 3vw;
+    }
 
+    svg{
+        width: 1.2vw;
+        height: 1.2vw;
+
+        @include pad{
+            width: 1.8vw;
+            height: 1.8vw;
+        }
+        @include mobile{
+            width: 1.2vh;
+            height: 1.2vh;
+        }
+    }
+    
     &:hover{
         text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 15px rgb(163, 232, 248), 0px 0px 20px rgb(149, 244, 233);
     }
