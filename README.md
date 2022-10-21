@@ -4,7 +4,7 @@ What is the project for?
 
 To connect with Web3, 
 
-You can Connect your wallet and view your wallet info and NFTs on multiple chains(ETH, BSC, Polygon) and read the metadata, attributes ,owners ,IDs that tokenAddress launched, etc by clicking them and read the contrac. You can also transfer NFTs in it and refresh data to see the lastest status of NFTs.
+You can connect your wallet and view your wallet info and NFTs on multiple chains(ETH, BSC, Polygon) and read the metadata, attributes ,owners ,IDs that tokenAddress launched, etc by clicking them and read the contrac. You can also transfer NFTs in it and refresh data to see the lastest status of NFTs.
 
 
 How to build the project up ?
