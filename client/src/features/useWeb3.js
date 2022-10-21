@@ -90,18 +90,11 @@ export const approveNFT = async (contractAddress, tokenId, chainId, contract_typ
     })
     const chain_id = await window.web3.eth.getChainId()
     if(chainId !== chain_id){
-        console.log(chainId)
-        console.log(chain_id)
         try{
             await window.provider.request({
                 method: 'wallet_switchEthereumChain',
                 params: [{ chainId: window.web3.utils.toHex(chainId) }]
             });
-            localStorage.clear();
-            localStorage.setItem("walletconnect", null);
-            localStorage.setItem("providerName", null);
-            localStorage.setItem("wallet_address", null);
-            window.location.reload();
         }catch(err){
             throw err;
         }
@@ -133,11 +126,6 @@ export const transferNFT = async (contractAddress, tokenId, chainId, contract_ty
                 method: 'wallet_switchEthereumChain',
                 params: [{ chainId: window.web3.utils.toHex(chainId) }]
             });
-            localStorage.clear();
-            localStorage.setItem("walletconnect", null);
-            localStorage.setItem("providerName", null);
-            localStorage.setItem("wallet_address", null);
-            window.location.reload();
         }catch(err){
             throw err;
         }
