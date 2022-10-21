@@ -71,16 +71,29 @@
     input{
         display: block;
         width: 50%;
-        padding: 1vh;
+        padding: 1vh 2vh;
         margin-top: 4vh;
         margin-bottom: 1vh;
         border-radius: 1vw;
+        font-size: 1.2vw;
         background-color: rgba(30, 30, 70, 0.2);
         backdrop-filter: blur(20px);
         color: white;
         outline: none;
         border: none;
         box-shadow: 0px 0px 5px white, 0px 0px 8px white;
+        @include pad{
+            font-size: 2.2vw;
+            padding: 1vh 2vh;
+        }
+        @include mid{
+            font-size: 2.6vw;
+            padding: 1vh 2vh;
+        }
+        @include mobile{
+            font-size: 4.4vw;
+            padding: 1vh 2vh;
+        }
     }
 
     .token_id{
