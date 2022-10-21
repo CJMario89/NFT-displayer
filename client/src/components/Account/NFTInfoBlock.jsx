@@ -153,7 +153,7 @@ const NFTInfoBlock = (prop) => {
                 </div>
             )
             for(let i = 0 ; i < NFT.owners.length; i++){
-                console.log(NFT.owners[i])
+                //console.log(NFT.owners[i])
                 NFTDetailContentArray.push(
                     <div className='NFTDetailContent' key={uuidv4()}>
                             {NFT.owners[i].owner}

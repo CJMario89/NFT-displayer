@@ -51,8 +51,8 @@ const WalletConnector = (prop) => {
     }
 
     const mobile = window.innerWidth < 768 ? true : false;
-    console.log(mobile)
-    console.log(window.innerWidth)
+    //console.log(mobile)
+    //console.log(window.innerWidth)
 
     const connectMetamask = async()=>{
 
