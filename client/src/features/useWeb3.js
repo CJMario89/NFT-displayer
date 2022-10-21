@@ -13,13 +13,13 @@ const getBlockLogByBinarySearch = async (from, to, contract, event)=>{
         for (let event of events) {
             if(window.contract_token_ids.indexOf(event.returnValues.tokenId) === -1){
                 window.contract_token_ids.push(event.returnValues.tokenId);
-                console.log(event.returnValues)
+                // console.log(event.returnValues)
             }
         }
         return;
     }).catch(async(err)=>{
         window.binarySearchTimes++;
-        console.log(err);
+        // console.log(err);
         if(to-from <= 0){
             return;
         }

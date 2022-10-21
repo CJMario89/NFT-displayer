@@ -38,7 +38,7 @@ const NFTCollection = (prop) => {
     useEffect(()=>{
         if(NFTsFetchedChain === 3 && NFTsDisplayedPage === 0){
             displayNextPageNFT();
-            console.log(NFTsDisplayedPage)
+            // console.log(NFTsDisplayedPage)
         }else if (NFTsFetchedChain === 3 ){
             setNextPageNFTButton(remainNFTsAmount.current !== 0 ? <div onClick={displayNextPageNFT} className="NextpageNFTButton">Display {amountToDisplay.current} more</div> : '');
         }

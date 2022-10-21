@@ -81,7 +81,11 @@ const WalletConnector = (prop) => {
 
             walletListener(web3, provider, "MetaMask", account, chain_id);
         }catch(e){
-            throw e;
+            if(err.hasOwnProperty('message')){
+                dispatch(alertMsg(e.message));
+            }else{
+                dispatch(alertMsg(e));
+            }
         }
     }
 
@@ -103,7 +107,11 @@ const WalletConnector = (prop) => {
             const account = accounts[0];
             walletListener(web3, provider, "WalletConnect", account, CHAIN_ID[selectedChain.current]);
         }catch(e){
-            throw e;
+            if(err.hasOwnProperty('message')){
+                dispatch(alertMsg(e.message));
+            }else{
+                dispatch(alertMsg(e));
+            }
         }
     }
 
@@ -129,9 +137,13 @@ const WalletConnector = (prop) => {
             walletListener(web3, provider, "Coinbase", account, CHAIN_ID[selectedChain.current]);
             // walletListener(window.ethereum, account);
         }catch(e){
-            console.log(e);
+            if(err.hasOwnProperty('message')){
+                dispatch(alertMsg(e.message));
+            }else{
+                dispatch(alertMsg(e));
+            }
         }
-        console.log(window.ethereum)
+        // console.log(window.ethereum)
     }
     const mobileConnect = ()=>{
         if(typeof window.ethereum !== "undefined"){
@@ -145,7 +157,7 @@ const WalletConnector = (prop) => {
     const walletListener = async (web3, provider,  providerName, account, chain_id)=>{
         provider.on("accountsChanged", async function(accounts){
             account = accounts[0];
-            console.log(account)
+            // console.log(account)
             const chain_id = await window.web3.eth.getChainId();
             const balanceWei = await window.web3.eth.getBalance(account);
             const balance = await web3.utils.fromWei(balanceWei, "ether");

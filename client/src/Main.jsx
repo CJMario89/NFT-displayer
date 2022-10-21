@@ -16,7 +16,6 @@ const Main = () => {
     // console.log(walletConnected)
 
     useEffect(()=>{
-        console.log(walletStatus)
         const wallet_address = localStorage.getItem('wallet_address')
         const providerName = localStorage.getItem('providerName')
         

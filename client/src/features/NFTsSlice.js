@@ -243,7 +243,7 @@ export const getNFTOwners = createAsyncThunk('NFTs/getNFTOwners', async(index, t
     if(contract_type === 'ERC721'){
         try{
             const owner = await getNFTOwnersByWeb3(token_address, token_id, chain, contract_type);
-            console.log(owner)
+            // console.log(owner)
             return {'result': [{
                 'owner_of': owner,
                 'amount': 1
@@ -269,7 +269,7 @@ export const getNFTOwners = createAsyncThunk('NFTs/getNFTOwners', async(index, t
         return axios
         .request(options)
         .then(function (response) {
-            console.log(response.data)
+            // console.log(response.data)
             return response.data;
         })
         .catch(function (error) {
@@ -378,7 +378,7 @@ export const NFTsSlice = createSlice({
             const index = action.meta.arg;
             state.NFTs[index].imgStatus = 'successed';
             state.NFTs[index].image = action.payload.image
-            console.log(action.payload.image)
+            // console.log(action.payload.image)
             state.NFTs[index].isVideo = action.payload.isVideo
         })
         .addCase(fetchNFTImg.pending, (state, action)=>{
