@@ -26,9 +26,9 @@ env: "react": "^18.2.0",, "express": "^4.18.2"
 
 
 1. setup dependency (https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up)
-2. Heroku login
+2. heroku login
 3. cd NFT-displayer
-4. Heroku create 
+4. heroku create 
 5. git push heroku main
 6. heroku ps:scale web=1
 7. heroku open
