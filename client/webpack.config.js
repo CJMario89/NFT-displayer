@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     mode: "development",
@@ -51,6 +52,14 @@ module.exports = {
             template: "./src/index.html",
             favicon: "./src/favicon.ico"
         }),
-        new NodePolyfillPlugin
+        new NodePolyfillPlugin,
+        new CopyPlugin({
+            patterns: [
+                { 
+                    from: path.resolve(__dirname, "source"), 
+                    to: path.resolve(__dirname, "public")
+                }
+            ],
+        }),
     ]
 };
