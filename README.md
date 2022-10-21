@@ -33,3 +33,5 @@ env: "react": "^18.2.0",, "express": "^4.18.2"
 6. heroku ps:scale web=1
 7. heroku open
 (Heroku)
+
+Visit the project on my Heroku: https://rocky-ravine-98700.herokuapp.com/
