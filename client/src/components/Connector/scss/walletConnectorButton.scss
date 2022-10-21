@@ -12,8 +12,17 @@
     background-color: rgba(0, 0, 150, 0.3);
     white-space: nowrap;
     cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
 
     &:hover{
         background-color: rgba(50, 50, 200, 0.3);
     }
+}
+
+.connectWalletFadeIn{
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 0;
+    transition: all 1s ease-in-out;
 }

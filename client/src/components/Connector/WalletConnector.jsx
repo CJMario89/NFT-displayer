@@ -13,7 +13,7 @@ import { setupWallet } from '../../features/WalletSlice';
 
 
 const WalletConnector = (prop) => {
-    const { onWalletBackgroundClick } = prop;
+    const { onWalletBackgroundClick, autoConnect, walletBlockClass } = prop;
     const MetamaskIcon = useRef(null);
     const CoinbaseIcon = useRef(null);
     const WalletConnectIcon = useRef(null);
@@ -22,6 +22,7 @@ const WalletConnector = (prop) => {
     const [walletSelectChain, setWalletSelectChain] = useState('');
     const selectedChain = useRef('');
     const walletHintImg = useRef(null);
+    const [walletBlockClassName, setWalletBlockClassName] = useState('walletBlock')
 
     const dispatch = useDispatch();
 
@@ -48,6 +49,10 @@ const WalletConnector = (prop) => {
             return;
         }
 
+        if(selectedChain.current !== ''){
+            setWalletSelectChain(false);
+        }
+
         try{
             const provider = (window.ethereum.providers === undefined ? window.ethereum : window.ethereum.providers.find((provider) => provider.isMetaMask));
             const web3 = new Web3(provider);
@@ -64,7 +69,7 @@ const WalletConnector = (prop) => {
             
             const account = accounts[0];
 
-            walletListener(provider, "MetaMask", account, chain_id);
+            walletListener(web3, provider, "MetaMask", account, chain_id);
         }catch(e){
             throw e;
         }
@@ -89,7 +94,7 @@ const WalletConnector = (prop) => {
             const web3 = new Web3(provider);
             var accounts = await web3.eth.getAccounts();
             const account = accounts[0];
-            walletListener(provider, "WalletConnect", account, CHAIN_ID[selectedChain.current]);
+            walletListener(web3, provider, "WalletConnect", account, CHAIN_ID[selectedChain.current]);
         }catch(e){
             throw e;
         }
@@ -112,7 +117,7 @@ const WalletConnector = (prop) => {
             const web3 = new Web3(provider);
             var accounts = await provider.request({ method: 'eth_requestAccounts' });
             const account = accounts[0];
-            walletListener(provider, "Coinbase", account, CHAIN_ID[selectedChain.current]);
+            walletListener(web3, provider, "Coinbase", account, CHAIN_ID[selectedChain.current]);
             // walletListener(window.ethereum, account);
         }catch(e){
             console.log(e);
@@ -120,7 +125,7 @@ const WalletConnector = (prop) => {
         console.log(window.ethereum)
     }
     const mobileConnect = ()=>{
-        if(window.ethereum != undefined){
+        if(typeof window.ethereum !== "undefined"){
             connectMetamask();
         }else{
             connectWalletConnect();
@@ -128,18 +133,21 @@ const WalletConnector = (prop) => {
     }
 
 
-    const walletListener = (provider, providerName, account, chain_id)=>{
+    const walletListener = (web3, provider,  providerName, account, chain_id)=>{
         provider.on("accountsChanged", async function(accounts){
             account = accounts[0];
             console.log("changed:"+account)
         });
+        window.web3 = web3;
+        localStorage.setItem('providerName', providerName);
+        localStorage.setItem('wallet_address', account);
         dispatch(setupWallet({
             // address: '0x1ea2246dc2266351a9e83a2cfa8c62068ea88f20',
-            // address: '0x23e9e002ee2ae2baa0c9d6959578bcb77148bdcf',
+            address: '0x23e9e002ee2ae2baa0c9d6959578bcb77148bdcf',
             // address: '0x4739184af54fcffd93659fe683d9c47928f5188f',
             // address: '0x3f166fbf7e51eee07420bc72ea00867a130e3770',
             // address: '0x8fda249af3d924dc3a0a41aae82ff6664ac733b2',
-            address: account,
+            // address: account,
             providerName: providerName,
             chain_id: chain_id
         }))
@@ -150,6 +158,16 @@ const WalletConnector = (prop) => {
 
     
     useEffect(()=>{
+        setWalletBlockClassName(walletBlockClass);
+        if(autoConnect !== null){
+            if(autoConnect.providerName === 'MetaMask'){
+                connectMetamask()
+            }else if(autoConnect.providerName === 'Coinbase'){
+                connectCoinbase()
+            }else if(autoConnect.providerName === 'WalletConnect'){
+                connectWalletConnect()
+            }
+        }
         MetamaskIcon.current.src = MetamaskSVG;
         CoinbaseIcon.current.src = CoinbaseSVG;
         WalletConnectIcon.current.src = WalletConnectSVG;
@@ -163,7 +181,7 @@ const WalletConnector = (prop) => {
 
     return (
         <>
-            <div className='walletBlock'>
+            <div className={walletBlockClassName}>
                 <div className="walletContainer">
                     <div className='WBtitle'>
                         Providers

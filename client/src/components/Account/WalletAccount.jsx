@@ -5,7 +5,6 @@ import NFTCollection from './NFTCollection'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeWallet, selectWallet } from '../../features/WalletSlice'
 import { getNFTs, selectNFTsCursor, selectNFTsFetchedChain, selectNFTsStatus } from '../../features/NFTsSlice'
-import Web3 from 'web3'
 
 const WalletAccount = () => {
     const [page, setPage] = useState('accountInfo');
@@ -20,7 +19,6 @@ const WalletAccount = () => {
 
     const disconnectWallet = ()=>{
         dispatch(removeWallet());
-        window.localStorage.clear();
     }
 
     useEffect(()=>{
@@ -31,19 +29,7 @@ const WalletAccount = () => {
         }
     }, [NFTsCursor, NFTsStatus, NFTsFetchedChain])
 
-    
-    const getOwners = async ()=>{
-        const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/4442b8b396684ed2a3e98f9e1772cdb0'))
-        const abi = await fetch('/ERC1155-ABI.json')
-        .then(response=>{
-            return response.json()
-        })
-
-        const contract = new web3.eth.Contract(abi, token_address);
-        token_uri = await contract.getPastEvents("");
-    }
-    // getOwners();
-
+   
     return (
         <>
             <div className='navbar'>

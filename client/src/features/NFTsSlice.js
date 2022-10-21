@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import Web3 from 'web3';
+import { getNFTOwnersByWeb3 } from './useWeb3';
 
 // const metadata = {
 //     name: '', //string
@@ -34,29 +35,34 @@ const initialState = {
     cursor: '', //string
     open: -1, //index
     chain: ['eth', 'bsc', 'polygon'],
+    chainId: [1, 56, 137],
     fetchedChain: 0, //0-2
     status: 'idle', // 'idle' | 'successed' | 'failed' | 'pending'
     error: ''
 }
 
-export const getNFTs = createAsyncThunk('NFTs/getNFTs', async(address, { getState }) => {
-    const state = getState().NFTs;
-    return await axios.request({
-            method: 'GET',
-            url: `https://deep-index.moralis.io/api/v2/${address}/nft`,
-            headers: {accept: 'application/json', 'X-API-Key': 'qenwkvrytGvQJBx6aAdOd4ILIFYWZCn87ESMGceEx5pKIsKSPwOsEtPKzhr9XhPs'},
-            params: {
-                chain: state.chain[state.fetchedChain],
-                format: 'decimal',
-                cursor: state.cursor
-            }
-        })
-        .then(function (response) {
-            return response.data;
-        })
-        .catch(function (error) {
-            console.error(error);
-        });
+export const getNFTs = createAsyncThunk('NFTs/getNFTs', async(address, thunkAPI) => {
+    const state = thunkAPI.getState().NFTs;
+    try{
+        return await axios.request({
+                method: 'GET',
+                url: `https://deep-index.moralis.io/api/v2/${address}/nft`,
+                headers: {accept: 'application/json', 'X-API-Key': 'qenwkvrytGvQJBx6aAdOd4ILIFYWZCn87ESMGceEx5pKIsKSPwOsEtPKzhr9XhPs'},
+                params: {
+                    chain: state.chain[state.fetchedChain],
+                    format: 'decimal',
+                    cursor: state.cursor
+                }
+            })
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    }catch(err){
+        return thunkAPI.rejectWithValue("failed");
+    }
 });
 
 export const fetchNFTMetadata = createAsyncThunk('NFTs/fetchNFTMetadata', async(index, thunkAPI)=>{
@@ -196,6 +202,8 @@ export const fetchNFTImg = createAsyncThunk('NFTs/fetchNFTImg', async(index, thu
                 return { image: image_url, isVideo: isVideo };
             }
 
+
+
             if(image_url.includes('ipfs://')){
                 image_url = image_url.replace('ipfs://', 'https://ipfs.io/ipfs/');
             }
@@ -231,13 +239,29 @@ export const getNFTOwners = createAsyncThunk('NFTs/getNFTOwners', async(index, t
     const token_address = state.NFTs[index].tokenAddress;
     const token_id = state.NFTs[index].tokenId;
     const chain = state.NFTs[index].chain;
+    const contract_type = state.NFTs[index].contractType;
+
+    if(contract_type === 'ERC721'){
+        try{
+            const owner = await getNFTOwnersByWeb3(token_address, token_id, chain, contract_type);
+            console.log(owner)
+            return {'result': [{
+                'owner_of': owner,
+                'amount': 1
+            }]};
+        }catch(err){
+            return thunkAPI.rejectWithValue('failed');
+        }
+    }
+
+
     const options = {
         method: 'GET',
         url: `https://deep-index.moralis.io/api/v2/nft/${token_address}/${token_id}/owners`,
         params: {
             chain: chain,
             format: 'decimal',
-            limit: 20
+            limit: 10
         },
         headers: {accept: 'application/json', 'X-API-Key': 'qenwkvrytGvQJBx6aAdOd4ILIFYWZCn87ESMGceEx5pKIsKSPwOsEtPKzhr9XhPs'}
       };
@@ -255,8 +279,11 @@ export const getNFTOwners = createAsyncThunk('NFTs/getNFTOwners', async(index, t
     }catch(err){
         return thunkAPI.rejectWithValue('failed');
     }
-      
 });
+
+
+
+
 
 
 export const NFTsSlice = createSlice({
@@ -286,6 +313,7 @@ export const NFTsSlice = createSlice({
                 const metadata = (nft.metadata !== null) ? JSON.parse(nft.metadata) : null;
                 const NFT = {
                     chain: state.chain[state.fetchedChain],
+                    chainId: state.chainId[state.fetchedChain],
                     tokenAddress: (nft.token_address !== null ? nft.token_address : "Unknown"),
                     tokenId: nft.token_id,
                     amount: nft.amount,

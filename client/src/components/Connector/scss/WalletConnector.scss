@@ -10,8 +10,18 @@
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 10px;
-    z-index: 3;
+    z-index: 51;
     background-color: rgba(30, 30, 70);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 1s ease-in-out;
+}
+
+.walletBlockFadeIn{
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 100;
+    transition: all 1s ease-in-out;
 }
 .walletContainer{
     display: flex;
@@ -31,7 +41,7 @@
         flex-wrap: wrap;
         justify-content: space-around;
         align-content: space-around;
-        font-size: 1.6vw;
+        font-size: 1.2vw;
         padding-top: 15px;
         padding-bottom: 15px;
         margin-top: 3px;
@@ -76,7 +86,7 @@
     .walletHintButton, .walletSelectChainButton{
         display: flex;
         text-align: center;
-        font-size: 1.4vw;
+        font-size: 1.2vw;
         line-height: 18px;
         padding: 10px 20px;
         padding-bottom: 15px;
@@ -126,6 +136,7 @@
     height: 100%;
     background-color: black;
     opacity: 0.5;
+    z-index: 50;
 }
 
 @media screen and (max-width:821px){

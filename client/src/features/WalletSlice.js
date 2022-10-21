@@ -21,7 +21,6 @@ export const walletSlice = createSlice({
         setupWallet:(state, action)=>{
             state.wallet = action.payload;
             state.status = 'connected';
-            console.log(state.status)
         },
         removeWallet:(state)=>{
             state.wallet = {
@@ -29,6 +28,9 @@ export const walletSlice = createSlice({
                 providerName: '',
                 chain_id: 1
             };
+            window.localStorage.clear();
+            localStorage.setItem('providerName', null)
+            localStorage.setItem('wallet_address', null)
             state.status = 'unconnected';
         }
     },

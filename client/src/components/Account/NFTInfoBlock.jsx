@@ -5,6 +5,7 @@ import { fetchNFTImg, getNFTOwners, selectNFTs, selectNFTsOpen } from '../../fea
 import { v4 as uuidv4 } from 'uuid';
 import { getContractTokenIds } from '../../features/useWeb3';
 import ContractTokenIdBlock from './ContractTokenIdBlock';
+import TransactionNFTBlock from './TransactionNFTBlock';
 
 const NFTInfoBlock = (prop) => {
     const { onNFTInfoBlockBackgroundClick } = prop;
@@ -17,7 +18,9 @@ const NFTInfoBlock = (prop) => {
     const [NFTImg, setNFTImg] = useState(null);
 
     const [contractTokenIdBlockFlag, setContractTokenIdBlockFlag] = useState(false);
+    const [transactionNFTFlag, setTransactionNFTFlag] = useState(false);
     const [contractTokenIdLoaded, setContractTokenIdLoaded] = useState(false);
+    transactionNFTFlag
 
     const [NFTDetailContent, setNFTDetailContent] = useState([]);
     const NFTDetail = {
@@ -206,12 +209,14 @@ const NFTInfoBlock = (prop) => {
                     <div className='NFTInfoController'>
                         <div onClick={()=>{onNFTInfoBlockBackgroundClick()}}>Close</div>
                         <div>Refresh</div>
+                        <div onClick={()=>{setTransactionNFTFlag(true)}}>Transfer</div>
                     </div>
                 </div>
             </div>
             <div className='NFTInfoBlockMask' onClick={()=>{onNFTInfoBlockBackgroundClick()}} onWheel={(e)=>{e.stopPropagation()}}></div>
 
-            {contractTokenIdBlockFlag  && <ContractTokenIdBlock onContractTokenIdBlockBackgroundClick={()=>{setContractTokenIdBlockFlag(false)}} loaded={contractTokenIdLoaded} contract_token_ids={window.contract_token_ids} chain={NFT.chain}/>}
+            {contractTokenIdBlockFlag  && <ContractTokenIdBlock onContractTokenIdBlockBackgroundClick={()=>{setContractTokenIdBlockFlag(false)}} loaded={contractTokenIdLoaded} chain={NFT.chain}/>}
+            {transactionNFTFlag  && <TransactionNFTBlock onTransactionNFTBlockBackgroundClick={()=>{setTransactionNFTFlag(false)}} contractAddress={NFT.tokenAddress} tokenId={NFT.tokenId} chainId={NFT.chainId} contract_type={NFT.contractType}/>}
         </>
 
     )
