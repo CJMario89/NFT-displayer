@@ -30,7 +30,7 @@ const WalletConnector = (prop) => {
 
     const providers = {
         'eth': 'https://mainnet.infura.io/v3/1f9ca76803de40b4b081c9d89dd407fb',
-        'bsc': 'https://bsc-dataseed.binance.org/',
+        'bsc': "https://hardworking-divine-ensemble.bsc.discover.quiknode.pro/43958efedb5ffdfbb03ed542992a33da7b09a51f/",
         'polygon': 'https://polygon-rpc.com'
     }
     const CHAIN_ID = {
@@ -88,6 +88,7 @@ const WalletConnector = (prop) => {
     const connectWalletConnect = async()=>{
         if(selectedChain.current === ''){
             dispatch(alertMsg("Please choose a network"))
+            return;
         }
         const provider = new WalletConnectProvider({
             rpc: {
@@ -110,6 +111,7 @@ const WalletConnector = (prop) => {
         
         if(selectedChain.current === ''){
             dispatch(alertMsg("Please choose a network"))
+            return;
         }
         const client = new CoinbaseWalletSDK({
             appName: 'NFT-displayer',

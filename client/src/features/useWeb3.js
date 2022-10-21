@@ -43,7 +43,7 @@ const createContract = async (contractAddress, chain, contract_type)=>{
 
     const providers = {
         'eth': 'https://mainnet.infura.io/v3/1f9ca76803de40b4b081c9d89dd407fb',
-        'bsc': 'https://bsc-dataseed.binance.org/',
+        'bsc': "https://hardworking-divine-ensemble.bsc.discover.quiknode.pro/43958efedb5ffdfbb03ed542992a33da7b09a51f/",
         'polygon': 'https://polygon-rpc.com'
     }
 
@@ -90,11 +90,18 @@ export const approveNFT = async (contractAddress, tokenId, chainId, contract_typ
     })
     const chain_id = await window.web3.eth.getChainId()
     if(chainId !== chain_id){
+        console.log(chainId)
+        console.log(chain_id)
         try{
             await window.provider.request({
                 method: 'wallet_switchEthereumChain',
                 params: [{ chainId: window.web3.utils.toHex(chainId) }]
             });
+            localStorage.clear();
+            localStorage.setItem("walletconnect", null);
+            localStorage.setItem("providerName", null);
+            localStorage.setItem("wallet_address", null);
+            window.location.reload();
         }catch(err){
             throw err;
         }
@@ -126,6 +133,11 @@ export const transferNFT = async (contractAddress, tokenId, chainId, contract_ty
                 method: 'wallet_switchEthereumChain',
                 params: [{ chainId: window.web3.utils.toHex(chainId) }]
             });
+            localStorage.clear();
+            localStorage.setItem("walletconnect", null);
+            localStorage.setItem("providerName", null);
+            localStorage.setItem("wallet_address", null);
+            window.location.reload();
         }catch(err){
             throw err;
         }
