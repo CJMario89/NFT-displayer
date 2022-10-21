@@ -83,7 +83,7 @@ const NFTInfoBlock = (prop) => {
                         {key}
                     </span>
                     {key === 'token address:' ? 
-                        <p onClick={()=>{showContractTokenIds(value)}} style={{cursor:'pointer'}}>
+                        <p onClick={()=>{showContractTokenIds(value)}} className='token_address'>
                             {value}
                         </p>
                         :
@@ -111,7 +111,7 @@ const NFTInfoBlock = (prop) => {
                         );
                     }else if(key === 'attributes'){
                         NFTDetailContentArray.push(
-                            <div  className='NFTDetailTitle' key={uuidv4()}>
+                            <div className='NFTDetailTitle' key={uuidv4()}>
                                 <span>
                                     Attributes
                                 </span>                                       
@@ -176,7 +176,6 @@ const NFTInfoBlock = (prop) => {
     }, [])
 
     async function showContractTokenIds(value){
-        console.log("here");
         const empty = [];
         window.contract_token_ids = empty;
         setContractTokenIdBlockFlag(true);

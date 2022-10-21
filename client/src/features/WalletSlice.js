@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 const wallet = {
     address: '', //string
     providerName: '', //string
-    chain_id: 1 //number
+    chain_id: 1, //number
+    balance: 0
 }
 
 const initialState = {
@@ -26,7 +27,8 @@ export const walletSlice = createSlice({
             state.wallet = {
                 address: '',
                 providerName: '',
-                chain_id: 1
+                chain_id: 1,
+                balance: 0
             };
             window.localStorage.clear();
             localStorage.setItem('providerName', null)

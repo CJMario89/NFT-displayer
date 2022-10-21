@@ -11,7 +11,7 @@
     text-shadow: 0px 0px 0px white, 0px 0px 5px white, 0px 0px 10px white;
     border: 1px solid white;
     border-radius: 10px;
-    box-shadow: 0px 0px 0px white, 0px 0px 15px white, 0px 0px 30px white;
+    box-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
     background-color: rgba(20, 20, 50, 0.5);
     backdrop-filter: blur(30px);
     z-index: 91;
@@ -76,6 +76,8 @@
             font-size: 20px;
             line-height: 20px;
             white-space: nowrap;
+            text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
+            color: rgb(209, 244, 233);
         }
 
         .NFTInfoTokenId{
@@ -90,6 +92,8 @@
             font-size: 20px;
             line-height: 20px;
             white-space: nowrap;
+            text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
+            color: rgb(209, 244, 233);
         }
     }
 
@@ -122,8 +126,8 @@
                 width: 10px;
                 height: 5px;
                 border-radius: 10px;
-                background-color: white;
-                box-shadow: 0px 0px 0px white, 0px 0px 3px white, 0px 0px 5px white;
+                background-color:rgb(209, 244, 233);
+                box-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
             }
     
             div{
@@ -135,12 +139,22 @@
                 font-size: 1.4vw;
                 overflow-wrap: anywhere;
                 word-break: break-all;
+
+                .token_address{
+                    text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 1px rgb(163, 232, 248);
+                    cursor: pointer;
+                    &:hover{
+                        text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
+                        color: rgb(209, 244, 233);
+                    }
+                }
     
                 span{
                     display: block;
                     width: 20vw;
                     margin-right: 2vw;
-                    text-shadow: 0px 0px 0px white, 0px 0px 3px white, 0px 0px 5px white;
+                    text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
+                    color: rgb(209, 244, 233);
                 }
                 p{
                     display: block;
@@ -149,7 +163,7 @@
                     width: -webkit-fill-available; 
                     width: fill-available;
                     margin: 0 auto;
-                    text-shadow: none;
+                    text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 1px rgb(163, 232, 248);
                 }
             }
 
@@ -160,6 +174,8 @@
                 font-size: 1.6vw;
                 padding-top: 8vh;
                 padding-bottom: 2vh;
+                text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
+                color: rgb(209, 244, 233);
 
                 span{
                     text-align: center;
@@ -197,8 +213,9 @@
 
                 &:hover{
                     transform: scale(0.95);
-                    text-shadow: 0px 0px 0px white, 0px 0px 5px white, 0px 0px 10px white;
-                    box-shadow: 0px 0px 0px white, 0px 0px 5px white, 0px 0px 10px white;
+                    box-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
+                    text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
+                    color: rgb(209, 244, 233);
                 }
             }
         }

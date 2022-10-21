@@ -133,23 +133,26 @@ const WalletConnector = (prop) => {
     }
 
 
-    const walletListener = (web3, provider,  providerName, account, chain_id)=>{
+    const walletListener = async (web3, provider,  providerName, account, chain_id)=>{
         provider.on("accountsChanged", async function(accounts){
             account = accounts[0];
             console.log("changed:"+account)
         });
         window.web3 = web3;
+        const balanceWei = await window.web3.eth.getBalance(account);
+        const balance = await web3.utils.fromWei(balanceWei, "ether");
         localStorage.setItem('providerName', providerName);
         localStorage.setItem('wallet_address', account);
         dispatch(setupWallet({
             // address: '0x1ea2246dc2266351a9e83a2cfa8c62068ea88f20',
-            address: '0x23e9e002ee2ae2baa0c9d6959578bcb77148bdcf',
+            // address: '0x23e9e002ee2ae2baa0c9d6959578bcb77148bdcf',
             // address: '0x4739184af54fcffd93659fe683d9c47928f5188f',
             // address: '0x3f166fbf7e51eee07420bc72ea00867a130e3770',
             // address: '0x8fda249af3d924dc3a0a41aae82ff6664ac733b2',
-            // address: account,
+            address: account,
             providerName: providerName,
-            chain_id: chain_id
+            chain_id: chain_id,
+            balance: balance
         }))
 
         console.log(account)
