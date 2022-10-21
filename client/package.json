@@ -1,7 +1,7 @@
 {
-    "name": "heroku",
+    "name": "NFT-displayer",
     "version": "1.0.0",
-    "description": "Heroku app",
+    "description": "NFT-displayer",
     "main": "./src/index.js",
     "scripts": {
         "dev": "webpack",
