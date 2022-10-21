@@ -24,6 +24,7 @@ env: "react": "^18.2.0",, "express": "^4.18.2"
 (run on localhost:5000)
 
 
+
 1. setup dependency (https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up)
 2. Heroku login
 3. cd NFT-displayer

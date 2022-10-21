@@ -181,8 +181,7 @@ const WalletConnector = (prop) => {
         localStorage.setItem('providerName', providerName);
         localStorage.setItem('wallet_address', account);
         dispatch(setupWallet({
-            address: '0x23e9e002ee2ae2baa0c9d6959578bcb77148bdcf',
-            // address: account,
+            address: account,
             providerName: providerName,
             chain_id: chain_id,
             balance: balance
