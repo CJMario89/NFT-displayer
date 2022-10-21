@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectWalletStatus } from './features/WalletSlice';
 import WalletConnectorButton from './components/Connector/WalletConnectorButton';
 import WalletAccount from './components/Account/WalletAccount';
+import AlertMsg from './components/Message/AlertMsg';
+
 
 const Main = () => {
     const [walletConnected, setWalletConnected] = useState(false);
@@ -27,11 +29,10 @@ const Main = () => {
         setWalletConnected(()=>(walletStatus === 'unconnected' ? false : true));
 
     }, [walletStatus])
-    console.log(autoConnect)
 
     return (
         <div className="main">
-            
+            <AlertMsg/>
 
 
             {!walletConnected && <WalletConnectorButton autoConnect={autoConnect}/>}

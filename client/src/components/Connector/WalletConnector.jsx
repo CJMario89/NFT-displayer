@@ -10,6 +10,8 @@ import MetamaskSVG from '../../assets/images/metamask.svg'
 import CoinbaseSVG from '../../assets/images/coinbase.svg'
 import WalletConnectSVG from '../../assets/images/walletconnect.svg'
 import { setupWallet } from '../../features/WalletSlice';
+import { alertMsg } from '../../features/MessageSlice';
+import { refreshNFTs, setRefreshSignal } from '../../features/NFTsSlice';
 
 
 const WalletConnector = (prop) => {
@@ -42,16 +44,24 @@ const WalletConnector = (prop) => {
         MetamaskExtension = window.ethereum.isMetaMask;
     }
 
+    if(walletSelectChain !== ''){
+        if(walletHint !== false){
+            setWalletHint(false);
+        }
+    }
+
     const connectMetamask = async()=>{
+
+        if(selectedChain.current !== ''){
+            setWalletSelectChain('');
+        }
 
         if(!MetamaskExtension){
             setWalletHint(true);
             return;
         }
 
-        if(selectedChain.current !== ''){
-            setWalletSelectChain(false);
-        }
+        
 
         try{
             const provider = (window.ethereum.providers === undefined ? window.ethereum : window.ethereum.providers.find((provider) => provider.isMetaMask));
@@ -76,16 +86,12 @@ const WalletConnector = (prop) => {
     }
 
     const connectWalletConnect = async()=>{
-        if(walletHint !== false){
-            setWalletHint(false);
-        }
-
         if(selectedChain.current === ''){
-            setWalletSelectChain(true);
+            dispatch(alertMsg("Please choose a network"))
         }
         const provider = new WalletConnectProvider({
             rpc: {
-                [CHAIN_ID[selectedChain.current]]: provider[selectedChain.current]
+                [CHAIN_ID[selectedChain.current]]: providers[selectedChain.current]
             },
             chainId: CHAIN_ID[selectedChain.current]
         });
@@ -100,9 +106,10 @@ const WalletConnector = (prop) => {
         }
     }
 
-    const connectCoinbase = async(chain)=>{
-        if(walletHint !== false){
-            setWalletHint(false);
+    const connectCoinbase = async()=>{
+        
+        if(selectedChain.current === ''){
+            dispatch(alertMsg("Please choose a network"))
         }
         const client = new CoinbaseWalletSDK({
             appName: 'NFT-displayer',
@@ -136,9 +143,21 @@ const WalletConnector = (prop) => {
     const walletListener = async (web3, provider,  providerName, account, chain_id)=>{
         provider.on("accountsChanged", async function(accounts){
             account = accounts[0];
-            console.log("changed:"+account)
+            console.log(account)
+            const chain_id = await window.web3.eth.getChainId();
+            const balanceWei = await window.web3.eth.getBalance(account);
+            const balance = await web3.utils.fromWei(balanceWei, "ether");
+            localStorage.setItem('wallet_address', account);
+            dispatch(setupWallet({
+                address: account,
+                providerName: localStorage.getItem('providerName', providerName),
+                chain_id: chain_id,
+                balance: balance
+            }))
+            dispatch(setRefreshSignal());
         });
         window.web3 = web3;
+        window.provider = provider;
         const balanceWei = await window.web3.eth.getBalance(account);
         const balance = await web3.utils.fromWei(balanceWei, "ether");
         localStorage.setItem('providerName', providerName);
@@ -155,8 +174,15 @@ const WalletConnector = (prop) => {
             balance: balance
         }))
 
-        console.log(account)
+        
         onWalletBackgroundClick();
+        if(autoConnect !== null){
+            if(autoConnect.account !== "null"){
+                return;
+            }
+        }
+        dispatch(alertMsg("Connected"));
+
     }
 
     
@@ -189,7 +215,7 @@ const WalletConnector = (prop) => {
                     <div className='WBtitle'>
                         Providers
                     </div>
-                    <div className="wallet" onClick={connectMetamask}>
+                    <div className="wallet" onClick={(e)=>{setWalletSelectChain(''); document.querySelector(".selectedProvider")?.classList.remove("selectedProvider"); e.currentTarget.classList.add("selectedProvider"); connectMetamask();}}>
                         <div className="walletIcon">
                             <img ref={MetamaskIcon} className="MetamaskIcon" alt=''></img>
                         </div>
@@ -245,8 +271,6 @@ const WalletConnector = (prop) => {
                         Connect
                     </div>
                 </div>
-                
-
                 }
             </div>
             <div className='walletBackground' onClick={onWalletBackgroundClick}></div>

@@ -17,7 +17,6 @@
         box-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
         text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
         color: rgb(209, 244, 233);
-    
     }
 
 
@@ -85,8 +84,8 @@
             width: 100%;
             text-overflow: ellipsis;
             overflow: hidden;
-            font-size: 16px;
-            line-height: 16px;
+            font-size: 1.2vw;
+            line-height: 1.2vw;
             white-space: nowrap;
         }
     
@@ -98,8 +97,8 @@
             width: 100%;
             text-overflow: ellipsis;
             overflow: hidden;
-            font-size: 16px;
-            line-height: 16px;
+            font-size: 1.2vw;
+            line-height: 1.2vw;
             white-space: nowrap;
         }
     }

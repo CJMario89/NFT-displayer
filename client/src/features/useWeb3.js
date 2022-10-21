@@ -18,11 +18,14 @@ const getBlockLogByBinarySearch = async (from, to, contract, event)=>{
         }
         return;
     }).catch(async(err)=>{
+        window.binarySearchTimes++;
         console.log(err);
         if(to-from <= 0){
             return;
         }
-
+        if(window.binarySearchTimes > 30){
+            return;
+        }
         let middle = Math.floor((to + from) / 2);
         await getBlockLogByBinarySearch(from, middle, contract, event);
         await getBlockLogByBinarySearch(middle + 1, to, contract, event);
@@ -53,6 +56,7 @@ const createContract = async (contractAddress, chain, contract_type)=>{
 
 
 export const getContractTokenIds = async(contractAddress, chain, contract_type)=>{
+    window.binarySearchTimes = 0;
         
     const {web3, contract} = await createContract(contractAddress, chain, contract_type);
     const blockNumber = await web3.eth.getBlockNumber();
@@ -79,6 +83,37 @@ export const getNFTOwnersByWeb3 = async(contractAddress, tokenId, chain, contrac
 
 
 
+export const approveNFT = async (contractAddress, tokenId, chainId, contract_type, to)=>{
+    const abi = await fetch(`/${contract_type}-ABI.json`)
+    .then(response=>{
+        return response.json()
+    })
+    const chain_id = await window.web3.eth.getChainId()
+    if(chainId !== chain_id){
+        try{
+            await window.provider.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: window.web3.utils.toHex(chainId) }]
+            });
+        }catch(err){
+            throw err;
+        }
+    }
+    const contract = new window.web3.eth.Contract(abi, contractAddress);
+    try{
+        const from = localStorage.getItem('wallet_address');
+        const estimateGasApprove = await contract.methods.approve(to, tokenId).estimateGas({from: from});
+        const result = await contract.methods.approve(to, tokenId).send({from: from, gas: estimateGasApprove});
+        if(result !== undefined){
+            return;
+        }
+    }catch(err){
+        throw err;
+    }
+    
+}
+
+
 export const transferNFT = async (contractAddress, tokenId, chainId, contract_type, to)=>{
     const abi = await fetch(`/${contract_type}-ABI.json`)
     .then(response=>{
@@ -86,15 +121,25 @@ export const transferNFT = async (contractAddress, tokenId, chainId, contract_ty
     })
     const chain_id = await window.web3.eth.getChainId()
     if(chainId !== chain_id){
-
+        try{
+            await window.provider.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: window.web3.utils.toHex(chainId) }]
+            });
+        }catch(err){
+            throw err;
+        }
     }
-    const contract = new web3.eth.Contract(abi, contractAddress);
+    const contract = new window.web3.eth.Contract(abi, contractAddress);
+    try{
+        const from = localStorage.getItem('wallet_address');
+        const estimateGas = await contract.methods.safeTransferFrom( from, to, tokenId).estimateGas({from: from});
+        const result = await contract.methods.safeTransferFrom( from, to, tokenId).send({from: from, gas: estimateGas});
+        if(result !== undefined){
+            return;
+        }
+    }catch(err){
+        throw err;
+    }
     
-    const from = localStorage.getItem('wallet_address');
-    const estimateGas = await contract.methods.safeTransferFrom( from, to, tokenId).estimateGas({from: from});
-    console.log(estimateGas)
-        console.log(from)
-        console.log(to)
-    const result = await contract.methods.safeTransferFrom( from, to, tokenId).send({from: from, gas: estimateGas});
-    console.log(result);
 }

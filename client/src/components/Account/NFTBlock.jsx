@@ -8,7 +8,27 @@ const NFTBlock = (props) => {
     const { index } = props;
     const dispatch = useDispatch();
     const NFTs = useSelector(selectNFTs);
-    const NFT = NFTs[index];
+    let NFT = NFTs[index];
+    
+    if(NFT === undefined){
+        NFT = {
+            'tokenAddress': '', //string
+            'tokenId': 0, //number
+            'amount': 0, //number
+            'blockNumber': 0, //number
+            'contractType': 'ERC721',//ERC721, ERC1155
+            'name': '', //string
+            'symbol': '', //string
+            'image': '', //blob //take from IPFS or others
+            'owners': [],
+            'isVideo': false, //boolean
+            'tokenURI': '', //string
+            'metadata': null, //metadata
+            'metadataStatus': 'idle', // 'idle' | 'successed' | 'failed' | 'pending'
+            'imgStatus': 'idle', // 'idle' | 'successed' | 'failed' | 'pending'
+            'ownersStatus': 'idle' // 'idle' | 'successed' | 'failed' | 'pending'
+        }
+    }
 
     const [NFTImg, setNFTImg] = useState(null);
     const NFTName = useRef(NFT.name);

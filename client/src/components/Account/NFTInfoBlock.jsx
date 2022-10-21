@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getContractTokenIds } from '../../features/useWeb3';
 import ContractTokenIdBlock from './ContractTokenIdBlock';
 import TransactionNFTBlock from './TransactionNFTBlock';
+import { alertMsg } from '../../features/MessageSlice';
 
 const NFTInfoBlock = (prop) => {
     const { onNFTInfoBlockBackgroundClick } = prop;
@@ -183,7 +184,12 @@ const NFTInfoBlock = (prop) => {
             return;
         }
         await getContractTokenIds(value, NFT.chain, NFT.contractType);
-        setContractTokenIdLoaded(true);
+        if(window.binarySearchTimes < 30){
+            setContractTokenIdLoaded(true);
+            dispatch(alertMsg('Finished'));
+        }else{
+            dispatch(alertMsg('Token Ids too many to handle'));
+        }
     }
 
     return (
@@ -207,7 +213,6 @@ const NFTInfoBlock = (prop) => {
                     
                     <div className='NFTInfoController'>
                         <div onClick={()=>{onNFTInfoBlockBackgroundClick()}}>Close</div>
-                        <div>Refresh</div>
                         <div onClick={()=>{setTransactionNFTFlag(true)}}>Transfer</div>
                     </div>
                 </div>

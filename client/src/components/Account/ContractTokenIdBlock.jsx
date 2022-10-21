@@ -53,7 +53,7 @@ const ContractTokenIdBlock = (prop) => {
                     </path>
                 </svg>}
                 <div>All Tokens Contract Launched</div>
-                <input ref={tokenInput} ></input>
+                <input ref={tokenInput} placeholder={"search token id"} ></input>
                 {showTokensList.map((token)=>{
                     return(<div className='token_id' key={uuidv4()}>
                         {token}

@@ -4,21 +4,24 @@ import AccountInfo from './AccountInfo'
 import NFTCollection from './NFTCollection'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeWallet, selectWallet } from '../../features/WalletSlice'
-import { getNFTs, selectNFTsCursor, selectNFTsFetchedChain, selectNFTsStatus } from '../../features/NFTsSlice'
+import { getNFTs, refreshNFTs, selectNFTsCursor, selectNFTsFetchedChain, selectNFTsRefreshSignal, selectNFTsStatus } from '../../features/NFTsSlice'
+import { alertMsg } from '../../features/MessageSlice'
 
 const WalletAccount = () => {
     const [page, setPage] = useState('accountInfo');
     const accountInfoClassName = 'walletAccountOption accountInfoOption ' + (page === 'accountInfo' ? 'walletAccountFocus': '');
-    const NFTCollectionClassName = 'walletAccountOption NFTCollectionOption ' + (page === 'NFT-collection' ? 'walletAccountFocus': '');
+    const NFTCollectionClassName = 'walletAccountOption NFTCollectionOption ' + (page === 'NFT-collection' || page == '' ? 'walletAccountFocus': '');
     const NFTsStatus = useSelector(selectNFTsStatus);
     const NFTsFetchedChain = useSelector(selectNFTsFetchedChain);
     const NFTsCursor = useSelector(selectNFTsCursor);
+    const refreshSignal = useSelector(selectNFTsRefreshSignal);
 
     const wallet = useSelector(selectWallet);
     const dispatch = useDispatch();
 
     const disconnectWallet = ()=>{
         dispatch(removeWallet());
+        dispatch(alertMsg("disconnected"));
     }
 
     useEffect(()=>{
@@ -26,9 +29,19 @@ const WalletAccount = () => {
             if(NFTsStatus !== 'pending'){
                 dispatch(getNFTs(wallet.address));
             }
+        }else{
+            if(page === ''){
+                setPage('NFT-collection');
+            }
         }
     }, [NFTsCursor, NFTsStatus, NFTsFetchedChain])
 
+    useEffect(()=>{
+        if(refreshSignal === true){
+            setPage('');
+            dispatch(refreshNFTs());
+        }
+    }, [refreshSignal])
    
     return (
         <>
@@ -51,7 +64,7 @@ const WalletAccount = () => {
             
             
             {page === 'accountInfo' && <AccountInfo/>}
-            {page === 'NFT-collection' && <NFTCollection/>}
+            {page === 'NFT-collection' && <NFTCollection onClickRefreshNFTsButton={()=>{setPage(''); dispatch(refreshNFTs()); dispatch(alertMsg("Refreshing ..."))}}/>}
         </>
     )
 }

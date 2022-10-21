@@ -1,0 +1,75 @@
+.msgCon{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    width: 35vh;
+    height: 10vh;
+    right: 0px;
+    top: 15vh;
+    padding: 3vh;
+    font-size: 1.4vw;
+    z-index: 100;
+    border-bottom-left-radius: 1.5vh;
+    border-top-left-radius: 1.5vh;
+    box-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
+    text-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
+    background-color: rgb(209, 244, 233, 0.1);
+    color: white;
+    animation: showMsg 5s ease-in-out 0s 1 none;
+    animation-fill-mode: none;
+    transform: translateX(120%);
+    opacity: 1;
+    backdrop-filter: blur(30px);
+}
+
+@keyframes showMsg{
+    0%{
+        transform: translateX(120%);
+        opacity: 1;
+    }
+    10%{
+        transform: translateX(0%);
+        opacity: 1;
+    }
+    99%{
+        opacity: 1;
+    }
+    100%{
+        transform: translateX(0%);
+        opacity: 0;
+    }
+}
+
+.msgCon:hover{
+    animation-play-state: paused;
+}
+
+
+.msgCon::after{
+    content: "";
+    display: block;
+    width: 90%;
+    position: absolute;
+    height: 5px;
+    bottom: 1vh;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 10px;
+    box-shadow: 0px 0px 0px rgb(178, 214, 255), 0px 0px 5px rgb(163, 232, 248), 0px 0px 10px rgb(149, 244, 233);
+    background:linear-gradient(to right, rgb(189, 244, 233) 0%, rgb(189, 244, 233) 50%, transparent 50%, transparent 100%);
+    background-repeat: no-repeat;
+    background-size: 200% 100%;
+    background-position: 100% 0px;
+    animation: msgShowProgress 5s ease-in-out 0s 1 forwards;
+}
+
+@keyframes msgShowProgress{
+    0%{
+        background-position: 100% 0px;
+    }
+    100%{
+        background-position: 0% 0px;
+    }
+}

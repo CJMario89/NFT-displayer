@@ -38,11 +38,13 @@ const initialState = {
     chainId: [1, 56, 137],
     fetchedChain: 0, //0-2
     status: 'idle', // 'idle' | 'successed' | 'failed' | 'pending'
-    error: ''
+    error: '',
+    refreshSignal: false
 }
 
 export const getNFTs = createAsyncThunk('NFTs/getNFTs', async(address, thunkAPI) => {
     const state = thunkAPI.getState().NFTs;
+
     try{
         return await axios.request({
                 method: 'GET',
@@ -57,9 +59,6 @@ export const getNFTs = createAsyncThunk('NFTs/getNFTs', async(address, thunkAPI)
             .then(function (response) {
                 return response.data;
             })
-            .catch(function (error) {
-                console.error(error);
-            });
     }catch(err){
         return thunkAPI.rejectWithValue("failed");
     }
@@ -284,8 +283,6 @@ export const getNFTOwners = createAsyncThunk('NFTs/getNFTOwners', async(index, t
 
 
 
-
-
 export const NFTsSlice = createSlice({
     name: 'NFTs',
     initialState,
@@ -301,6 +298,22 @@ export const NFTsSlice = createSlice({
         },
         clearOpen: (state)=>{
             state.open = -1;
+        },
+        refreshNFTs: (state)=>{
+            const empty = [];
+            delete state.NFTs;
+            state.NFTs = empty;
+            state.total = 0;
+            state.displayedPage = 0;
+            state.cursor = null;
+            state.open = -1;
+            state.fetchedChain = 0;
+            state.status = 'idle';
+            state.error = '';
+            state.refreshSignal = false;
+        },
+        setRefreshSignal: (state)=>{
+            state.refreshSignal = true;
         }
     },
     extraReducers: (builder)=>{
@@ -365,6 +378,7 @@ export const NFTsSlice = createSlice({
             const index = action.meta.arg;
             state.NFTs[index].imgStatus = 'successed';
             state.NFTs[index].image = action.payload.image
+            console.log(action.payload.image)
             state.NFTs[index].isVideo = action.payload.isVideo
         })
         .addCase(fetchNFTImg.pending, (state, action)=>{
@@ -406,7 +420,8 @@ export const selectNFTsCursor = state => state.NFTs.cursor;
 export const selectNFTsOpen = state => state.NFTs.open;
 export const selectNFTsStatus = state => state.NFTs.status;
 export const selectNFTsError = state => state.NFTs.error;
+export const selectNFTsRefreshSignal = state => state.NFTs.refreshSignal;
 
-export const { addDisplayedPage, clearDisplayedPage, setOpen, clearOpen } = NFTsSlice.actions;
+export const { addDisplayedPage, clearDisplayedPage, setOpen, clearOpen, refreshNFTs, setRefreshSignal } = NFTsSlice.actions;
 
 export default NFTsSlice.reducer
