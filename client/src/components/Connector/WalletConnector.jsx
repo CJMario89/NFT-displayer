@@ -11,7 +11,7 @@ import CoinbaseSVG from '../../assets/images/coinbase.svg'
 import WalletConnectSVG from '../../assets/images/walletconnect.svg'
 import { setupWallet } from '../../features/WalletSlice';
 import { alertMsg } from '../../features/MessageSlice';
-import { refreshNFTs, setRefreshSignal } from '../../features/NFTsSlice';
+import { setRefreshSignal } from '../../features/NFTsSlice';
 
 
 const WalletConnector = (prop) => {

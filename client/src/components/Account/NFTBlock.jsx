@@ -1,7 +1,7 @@
 import './scss/NFTBlock.scss'
 import React, { memo, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchNFTImg, selectNFTs, selectNFTsError } from '../../features/NFTsSlice';
+import { fetchNFTImg, selectNFTs, selectNFTsError, selectNFTsKey } from '../../features/NFTsSlice';
 import { setOpen } from '../../features/NFTsSlice';
 
 const NFTBlock = (props) => {
@@ -34,10 +34,11 @@ const NFTBlock = (props) => {
     const NFTName = useRef(NFT.name);
     const NFTTokenId = useRef('#'+NFT.tokenId);
     const NFTsError = useSelector(selectNFTsError);
+    const NFTskey = useSelector(selectNFTsKey);
 
     useEffect(()=>{
         if(NFT.metadataStatus === 'successed' || NFT.metadataStatus === 'failed'){
-            dispatch(fetchNFTImg(index));
+            dispatch(fetchNFTImg({'index':index, 'key':NFTskey}));
         }
     }, [NFT.metadataStatus])
 

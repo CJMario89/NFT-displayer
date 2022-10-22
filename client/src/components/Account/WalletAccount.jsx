@@ -4,7 +4,7 @@ import AccountInfo from './AccountInfo'
 import NFTCollection from './NFTCollection'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeWallet, selectWallet } from '../../features/WalletSlice'
-import { getNFTs, refreshNFTs, selectNFTsCursor, selectNFTsFetchedChain, selectNFTsRefreshSignal, selectNFTsStatus } from '../../features/NFTsSlice'
+import { getNFTs, refreshNFTs, selectNFTsCursor, selectNFTsFetchedChain, selectNFTsKey, selectNFTsRefreshSignal, selectNFTsStatus, setRefreshSignal } from '../../features/NFTsSlice'
 import { alertMsg } from '../../features/MessageSlice'
 
 const WalletAccount = () => {
@@ -14,7 +14,8 @@ const WalletAccount = () => {
     const NFTsStatus = useSelector(selectNFTsStatus);
     const NFTsFetchedChain = useSelector(selectNFTsFetchedChain);
     const NFTsCursor = useSelector(selectNFTsCursor);
-    const refreshSignal = useSelector(selectNFTsRefreshSignal);
+    const NFTsRefreshSignal = useSelector(selectNFTsRefreshSignal);
+    const NFTskey = useSelector(selectNFTsKey);
 
     const wallet = useSelector(selectWallet);
     const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const WalletAccount = () => {
     useEffect(()=>{
         if(NFTsFetchedChain < 3){
             if(NFTsStatus !== 'pending'){
-                dispatch(getNFTs(wallet.address));
+                dispatch(getNFTs({ 'address': wallet.address, 'key': NFTskey}));
             }
         }else{
             if(page === ''){
@@ -37,11 +38,11 @@ const WalletAccount = () => {
     }, [NFTsCursor, NFTsStatus, NFTsFetchedChain])
 
     useEffect(()=>{
-        if(refreshSignal === true){
+        if(NFTsRefreshSignal === true){
             setPage('');
             dispatch(refreshNFTs());
         }
-    }, [refreshSignal])
+    }, [NFTsRefreshSignal])
    
     return (
         <>
@@ -64,7 +65,7 @@ const WalletAccount = () => {
             
             
             {page === 'accountInfo' && <AccountInfo/>}
-            {page === 'NFT-collection' && <NFTCollection onClickRefreshNFTsButton={()=>{setPage(''); dispatch(refreshNFTs()); dispatch(alertMsg("Refreshing ..."))}}/>}
+            {page === 'NFT-collection' && <NFTCollection onClickRefreshNFTsButton={()=>{setPage(''); dispatch(setRefreshSignal()); dispatch(alertMsg("Refreshing ..."))}}/>}
         </>
     )
 }

@@ -1,7 +1,7 @@
 import './scss/NFTInfoBlock.scss'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchNFTImg, getNFTOwners, selectNFTs, selectNFTsOpen } from '../../features/NFTsSlice';
+import { fetchNFTImg, getNFTOwners, selectNFTs, selectNFTsKey, selectNFTsOpen } from '../../features/NFTsSlice';
 import { v4 as uuidv4 } from 'uuid';
 import { getContractTokenIds } from '../../features/useWeb3';
 import ContractTokenIdBlock from './ContractTokenIdBlock';
@@ -12,16 +12,34 @@ const NFTInfoBlock = (prop) => {
     const { onNFTInfoBlockBackgroundClick } = prop;
     const dispatch = useDispatch();
     const index = useSelector(selectNFTsOpen);
-    if(index === -1){
-        return(<></>);
-    }
-    const NFT = useSelector(selectNFTs)[index];
+    
+    let NFT = useSelector(selectNFTs)[index];
     const [NFTImg, setNFTImg] = useState(null);
 
     const [contractTokenIdBlockFlag, setContractTokenIdBlockFlag] = useState(false);
     const [transactionNFTFlag, setTransactionNFTFlag] = useState(false);
     const [contractTokenIdLoaded, setContractTokenIdLoaded] = useState(false);
-    transactionNFTFlag
+    const NFTskey = useSelector(selectNFTsKey);
+    
+    if(NFT === undefined){
+        NFT = {
+            'tokenAddress': '', //string
+            'tokenId': 0, //number
+            'amount': 0, //number
+            'blockNumber': 0, //number
+            'contractType': 'ERC721',//ERC721, ERC1155
+            'name': '', //string
+            'symbol': '', //string
+            'image': '', //blob //take from IPFS or others
+            'owners': [],
+            'isVideo': false, //boolean
+            'tokenURI': '', //string
+            'metadata': null, //metadata
+            'metadataStatus': 'idle', // 'idle' | 'successed' | 'failed' | 'pending'
+            'imgStatus': 'idle', // 'idle' | 'successed' | 'failed' | 'pending'
+            'ownersStatus': 'idle' // 'idle' | 'successed' | 'failed' | 'pending'
+        }
+    }
 
     const [NFTDetailContent, setNFTDetailContent] = useState([]);
     const NFTDetail = {
@@ -37,6 +55,9 @@ const NFTInfoBlock = (prop) => {
 
 
     useEffect(()=>{
+        if(index === -1){
+            return;
+        }
         if(NFT.metadataStatus === 'successed'){
             if(NFT.image !== null && NFT.image !== '' && typeof NFT.image !== "undefined"){
                 if(NFT.isVideo){
@@ -69,8 +90,11 @@ const NFTInfoBlock = (prop) => {
     }, [NFT.metadataStatus, NFT.imgStatus])
 
     useEffect(()=>{
+        if(index === -1){
+            return;
+        }
         if(NFT.imgStatus === 'failed'){
-            dispatch(fetchNFTImg(index));
+            dispatch(fetchNFTImg({'index':index, 'key':NFTskey}));
         }
 
 
@@ -173,7 +197,9 @@ const NFTInfoBlock = (prop) => {
 
 
     useEffect(()=>{
-        dispatch(getNFTOwners(index));
+        if(index !== -1){
+            dispatch(getNFTOwners({'index':index, 'key':NFTskey}));
+        }
     }, [])
 
     async function showContractTokenIds(value){
@@ -194,6 +220,7 @@ const NFTInfoBlock = (prop) => {
 
     return (
         <>
+            {index === -1 || <div>
             <div className='NFTInfoBlock'>
                 <div className='NFTInfoImgContainer'>
                     <div className='NFTInfoImg'>
@@ -221,6 +248,7 @@ const NFTInfoBlock = (prop) => {
 
             {contractTokenIdBlockFlag  && <ContractTokenIdBlock onContractTokenIdBlockBackgroundClick={()=>{setContractTokenIdBlockFlag(false)}} loaded={contractTokenIdLoaded} chain={NFT.chain}/>}
             {transactionNFTFlag  && <TransactionNFTBlock onTransactionNFTBlockBackgroundClick={()=>{setTransactionNFTFlag(false)}} contractAddress={NFT.tokenAddress} tokenId={NFT.tokenId} chainId={NFT.chainId} contract_type={NFT.contractType}/>}
+            </div>}
         </>
 
     )

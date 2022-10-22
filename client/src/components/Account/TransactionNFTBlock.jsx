@@ -9,15 +9,27 @@ const TransactionNFTBlock = (prop) => {
     const { onTransactionNFTBlockBackgroundClick, contractAddress, tokenId, chainId, contract_type } = prop;
     const transferTo = useRef(null);
     const dispatch = useDispatch();
-    const [approveContent, setApproveContent] = useState('approve');
-    const [transferContent, setTransferContent] = useState('transfer');
+    const [approveContent, setApproveContent] = useState(
+        <div className='TransactionNFTButton' onClick={requestApproveNFT}>
+            approve
+        </div>);
+    const [transferContent, setTransferContent] = useState(
+        <div className='TransactionNFTButton' onClick={requestTransferNFT}>
+            transfer
+        </div>);
 
-    const requestApproveNFT = async()=>{
+    async function requestApproveNFT(){
         try{
-            setApproveContent("approving...");
+            setApproveContent(
+            <div className='TransactionNFTButton'>
+                approving...
+            </div>);
             await approveNFT(contractAddress, tokenId, chainId, contract_type, transferTo.current.value);
             dispatch(alertMsg("NFT approved"));
-            setApproveContent("approved");
+            setApproveContent(
+                <div className='TransactionNFTButton'>
+                    approved
+                </div>);
         }catch(err){
             if(err.hasOwnProperty('message')){
                 if(err.message.includes("invalid address")){
@@ -32,34 +44,45 @@ const TransactionNFTBlock = (prop) => {
             }else{
                 dispatch(alertMsg("Something when wrong!"));
             }
-            setApproveContent("approve");
+            setApproveContent(
+                <div className='TransactionNFTButton' onClick={requestApproveNFT}>
+                    approve
+                </div>);
         }
     }
 
-    const requestTransferNFT = async ()=>{
+    async function requestTransferNFT(){
         try{
-            setTransferContent('transferring...');
+            setTransferContent(
+                <div className='TransactionNFTButton'>
+                    transferring...
+                </div>);
             await transferNFT(contractAddress, tokenId, chainId, contract_type, transferTo.current.value);
             dispatch(alertMsg("NFT transferred"));
-            setTransferContent('transferred');
+            setTransferContent(
+                <div className='TransactionNFTButton'>
+                    transferred
+                </div>);
             onTransactionNFTBlockBackgroundClick();
             setRefreshSignal(true);
         }catch(err){
             if(err.hasOwnProperty('message')){
                 if(err.message.includes("invalid address")){
                     dispatch(alertMsg('invalid address'));
+                }else if(err.message.includes("transaction underpriced")){
+                    dispatch(alertMsg('Gas fee is not enough'));
+                }else if(err.message.includes("transfer of token that is not own")){
+                    dispatch(alertMsg("don't own this token"));
                 }else{
-                    if(err.message.includes("invalid address")){
-                        dispatch(alertMsg(err.message.message));
-                    }else if(err.includes('transaction underpriced')){
-                        dispatch(alertMsg('Gas fee is not enough'));
-                    }
                     dispatch(alertMsg(err.message));
                 }
             }else{
                 dispatch(alertMsg("Something when wrong!"));
             }
-            setTransferContent('transfer');
+            setTransferContent(
+                <div className='TransactionNFTButton' onClick={requestTransferNFT}>
+                    transfer
+                </div>);
         }
     }
 
@@ -68,12 +91,10 @@ const TransactionNFTBlock = (prop) => {
             <div className='TransactionNFTBlock'>
                 <div>Transfer NFT To</div>
                 <input ref={transferTo} placeholder={"address"}></input>
-                <div className='TransactionNFTButton' onClick={requestApproveNFT}>
                     {approveContent}
-                </div>
-                <div className='TransactionNFTButton' onClick={requestTransferNFT}>
+                
                     {transferContent}
-                </div>
+                    
             </div>
             <div className='TransactionNFTBlockMask' onClick={()=>{onTransactionNFTBlockBackgroundClick()}}></div>
         </>

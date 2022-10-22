@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import WalletConnector from './WalletConnector';
 import './scss/walletConnectorButton.scss'
 import Logo3D from '../Logo/Logo3D';
