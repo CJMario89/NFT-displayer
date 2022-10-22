@@ -100,7 +100,9 @@ const WalletConnector = (prop) => {
         }
         const provider = new WalletConnectProvider({
             rpc: {
-                [CHAIN_ID[selectedChain.current]]: providers[selectedChain.current]
+                1: 'https://mainnet.infura.io/v3/1f9ca76803de40b4b081c9d89dd407fb',
+                56: "https://hardworking-divine-ensemble.bsc.discover.quiknode.pro/43958efedb5ffdfbb03ed542992a33da7b09a51f/",
+                137: 'https://polygon-rpc.com'
             },
             chainId: CHAIN_ID[selectedChain.current]
         });
@@ -108,8 +110,10 @@ const WalletConnector = (prop) => {
             await provider.enable();
             const web3 = new Web3(provider);
             var accounts = await web3.eth.getAccounts();
+            var chain_id = await web3.eth.getChainId();
+
             const account = accounts[0];
-            walletListener(web3, provider, "WalletConnect", account, CHAIN_ID[selectedChain.current]);
+            walletListener(web3, provider, "WalletConnect", account, chain_id);
         }catch(e){
             if(e.hasOwnProperty('message')){
                 dispatch(alertMsg(e.message));
