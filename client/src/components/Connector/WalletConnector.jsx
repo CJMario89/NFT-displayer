@@ -85,7 +85,7 @@ const WalletConnector = (prop) => {
 
             walletListener(web3, provider, "MetaMask", account, chain_id);
         }catch(e){
-            if(err.hasOwnProperty('message')){
+            if(e.hasOwnProperty('message')){
                 dispatch(alertMsg(e.message));
             }else{
                 dispatch(alertMsg(e));
@@ -111,7 +111,7 @@ const WalletConnector = (prop) => {
             const account = accounts[0];
             walletListener(web3, provider, "WalletConnect", account, CHAIN_ID[selectedChain.current]);
         }catch(e){
-            if(err.hasOwnProperty('message')){
+            if(e.hasOwnProperty('message')){
                 dispatch(alertMsg(e.message));
             }else{
                 dispatch(alertMsg(e));
@@ -141,7 +141,7 @@ const WalletConnector = (prop) => {
             walletListener(web3, provider, "Coinbase", account, CHAIN_ID[selectedChain.current]);
             // walletListener(window.ethereum, account);
         }catch(e){
-            if(err.hasOwnProperty('message')){
+            if(e.hasOwnProperty('message')){
                 dispatch(alertMsg(e.message));
             }else{
                 dispatch(alertMsg(e));
