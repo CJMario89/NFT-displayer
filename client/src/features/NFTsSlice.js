@@ -224,7 +224,7 @@ export const fetchNFTImg = createAsyncThunk('NFTs/fetchNFTImg', async(index, thu
                 return { image: image, isVideo: isVideo };
             }
         }
-        return thunkAPI.rejectWithValue(err);
+        return thunkAPI.rejectWithValue('failed');
 
     }catch(err){
         return thunkAPI.rejectWithValue(err);
@@ -388,6 +388,7 @@ export const NFTsSlice = createSlice({
         .addCase(fetchNFTImg.rejected, (state, action)=>{
             const index = action.meta.arg;
             state.NFTs[index].imgStatus = 'failed';
+            console.log(action)
             state.error = action.error.message;
         })
         .addCase(getNFTOwners.fulfilled, (state, action)=>{
