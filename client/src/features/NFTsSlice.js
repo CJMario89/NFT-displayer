@@ -388,7 +388,6 @@ export const NFTsSlice = createSlice({
         .addCase(fetchNFTImg.rejected, (state, action)=>{
             const index = action.meta.arg;
             state.NFTs[index].imgStatus = 'failed';
-            console.log(action)
             state.error = action.error.message;
         })
         .addCase(getNFTOwners.fulfilled, (state, action)=>{
