@@ -102,8 +102,8 @@ export const approveNFT = async (contractAddress, tokenId, chainId, contract_typ
     const contract = new window.web3.eth.Contract(abi, contractAddress);
     try{
         const from = localStorage.getItem('wallet_address');
-        const estimateGasApprove = await contract.methods.approve(to, tokenId).estimateGas({from: from});
-        const result = await contract.methods.approve(to, tokenId).send({from: from, gas: estimateGasApprove});
+        const estimateGasApprove = await contract.methods.setApprovalForAll(to, true).estimateGas({from: from, to: to});
+        const result = await contract.methods.setApprovalForAll(to, true).send({from: from, gas: estimateGasApprove, to: to});
         if(result !== undefined){
             return;
         }
@@ -133,11 +133,20 @@ export const transferNFT = async (contractAddress, tokenId, chainId, contract_ty
     const contract = new window.web3.eth.Contract(abi, contractAddress);
     try{
         const from = localStorage.getItem('wallet_address');
-        const estimateGas = await contract.methods.safeTransferFrom( from, to, tokenId).estimateGas({from: from});
-        const result = await contract.methods.safeTransferFrom( from, to, tokenId).send({from: from, gas: estimateGas});
-        if(result !== undefined){
-            return;
+        if(contract_type === 'ERC721'){
+            const estimateGas = await contract.methods.safeTransferFrom( from, to, tokenId).estimateGas({from: from, to: to});
+            const result = await contract.methods.safeTransferFrom( from, to, tokenId).send({from: from, gas: estimateGas, to: to});
+            if(result !== undefined){
+                return;
+            }
+        }else if(contract_type === 'ERC1155'){
+            const estimateGas = await contract.methods.safeTransferFrom( from, to, tokenId, 1, '0x0').estimateGas({from: from, to: to});
+            const result = await contract.methods.safeTransferFrom( from, to, tokenId, 1, '0x0').send({from: from, gas: estimateGas, to: to});
+            if(result !== undefined){
+                return;
+            }
         }
+        
     }catch(err){
         throw err;
     }

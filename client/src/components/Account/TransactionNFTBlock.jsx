@@ -22,6 +22,8 @@ const TransactionNFTBlock = (prop) => {
             if(err.hasOwnProperty('message')){
                 if(err.message.includes("invalid address")){
                     dispatch(alertMsg('invalid address'));
+                }else if(err.message.includes("transaction underpriced")){
+                    dispatch(alertMsg('Gas fee is not enough'));
                 }else{
                     dispatch(alertMsg(err.message));
                 }
@@ -47,6 +49,8 @@ const TransactionNFTBlock = (prop) => {
                 }else{
                     if(err.message.includes("invalid address")){
                         dispatch(alertMsg(err.message.message));
+                    }else if(err.includes('transaction underpriced')){
+                        dispatch(alertMsg('Gas fee is not enough'));
                     }
                     dispatch(alertMsg(err.message));
                 }
