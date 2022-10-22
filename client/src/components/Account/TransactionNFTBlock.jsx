@@ -4,6 +4,7 @@ import { approveNFT, transferNFT } from '../../features/useWeb3'
 import { alertMsg } from '../../features/MessageSlice';
 import { useDispatch } from 'react-redux';
 import { setRefreshSignal } from '../../features/NFTsSlice';
+import { CoinbaseWalletProvider } from '@coinbase/wallet-sdk';
 
 const TransactionNFTBlock = (prop) => {
     const { onTransactionNFTBlockBackgroundClick, contractAddress, tokenId, chainId, contract_type } = prop;
@@ -38,6 +39,9 @@ const TransactionNFTBlock = (prop) => {
                     dispatch(alertMsg('Gas fee is not enough'));
                 }else if(err.message.includes("approve to caller")){
                     dispatch(alertMsg('approve to caller'));
+                }else if(err.message.includes("Internal JSON-RPC error.")){
+                    const message = await parseError(err.message);
+                    dispatch(alertMsg(message));
                 }else{
                     dispatch(alertMsg(err.message));
                 }
@@ -73,6 +77,9 @@ const TransactionNFTBlock = (prop) => {
                     dispatch(alertMsg('Gas fee is not enough'));
                 }else if(err.message.includes("transfer of token that is not own")){
                     dispatch(alertMsg("don't own this token"));
+                }else if(err.message.includes("Internal JSON-RPC error.")){
+                    const message = await parseError(err.message);
+                    dispatch(alertMsg(message));
                 }else{
                     dispatch(alertMsg(err.message));
                 }
@@ -83,6 +90,17 @@ const TransactionNFTBlock = (prop) => {
                 <div className='TransactionNFTButton' onClick={requestTransferNFT}>
                     transfer
                 </div>);
+        }
+    }
+
+
+    const parseError = async(err)=>{
+        const errorJsonString = err.replace("Internal JSON-RPC error.", "");
+        const errJson = await JSON.parse(errorJsonString);
+        if(errJson.hasOwnProperty("message")){
+            return errJson.message;
+        }else{
+            return errJson;
         }
     }
 
