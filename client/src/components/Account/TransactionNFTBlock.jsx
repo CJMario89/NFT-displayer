@@ -24,6 +24,8 @@ const TransactionNFTBlock = (prop) => {
                     dispatch(alertMsg('invalid address'));
                 }else if(err.message.includes("transaction underpriced")){
                     dispatch(alertMsg('Gas fee is not enough'));
+                }else if(err.message.includes("approve to caller")){
+                    dispatch(alertMsg('approve to caller'));
                 }else{
                     dispatch(alertMsg(err.message));
                 }
