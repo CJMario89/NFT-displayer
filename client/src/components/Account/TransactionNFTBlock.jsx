@@ -4,7 +4,6 @@ import { approveNFT, transferNFT } from '../../features/useWeb3'
 import { alertMsg } from '../../features/MessageSlice';
 import { useDispatch } from 'react-redux';
 import { setRefreshSignal } from '../../features/NFTsSlice';
-import { CoinbaseWalletProvider } from '@coinbase/wallet-sdk';
 
 const TransactionNFTBlock = (prop) => {
     const { onTransactionNFTBlockBackgroundClick, contractAddress, tokenId, chainId, contract_type } = prop;
